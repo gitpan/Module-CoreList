@@ -1,10 +1,10 @@
 package Module::CoreList;
-#       $Id: CoreList.pm,v 1.23 2002/07/19 02:30:17 richardc Exp $
+#       $Id: CoreList.pm,v 1.24 2002/07/30 04:43:03 richardc Exp $
 
 use strict;
 use Carp;
 use vars qw/$VERSION %released %version/;
-$VERSION = '1.6';
+$VERSION = '1.7';
 
 =head1 NAME
 
@@ -41,41 +41,7 @@ welcomed for earlier versions.
 
 =head1 HISTORY
 
-=over
-
-=item 1.6 19th July 2002
-
-Included Config as a shipped module for all releases of perl (caught
-by Mark Fowler)
-
-Added data for the 5.8 release.
-
-=item 1.5 2nd April 2002
-
-Fixed a glaring bug caught by the testsuite but sadly released.
-perl5.004_05 was released post 5.005_03 and so isn't the first release
-to contain File::Spec.
-
-Added data for 5.003_07, 5.004, and 5.005 releases.
-
-Added the %released hash.
-
-=item 1.4 2nd April 2002
-
-Bugfixes from Roland Bauer to allow the code to work under 5.004_04.
-
-Using a cgi developed by Roland caught and fixed a number of bugs in
-the previous extraction of module names.
-
-Rewrote the name extractor to be simpler.
-
-Added data for the 5.004_05 and 5.6.0 releases of perl.
-
-=item 1.3 25th March 2002.
-
-Initial CPAN release, covers 5.00503, 5.6.1 and 5.7.3
-
-=back
+Moved to Changes file
 
 =head1 AUTHOR
 
@@ -93,6 +59,20 @@ under the same terms as Perl itself.
 L<Module::Info>, L<perl>
 
 =cut
+
+my $dumpinc = 0;
+sub import {
+    my $self = shift;
+    my $what = shift || '';
+    if ($what eq 'dumpinc') {
+        $dumpinc = 1;
+    }
+}
+
+END {
+    print "---INC---\n", join "\n" => keys %INC
+      if $dumpinc;
+}
 
 
 sub first_release {
