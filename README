@@ -23,11 +23,17 @@ DESCRIPTION
 
 CAVEATS
     Module::CoreList currently only covers the 5.003_07, 5.004, 5.004)05,
-    5.005, 5.005_03, 5.6.0, 5.6.1 and 5.7.3 releases of perl. Probing this
-    information can be rather time consuming so patches are welcomed for
-    earlier versions.
+    5.005, 5.005_03, 5.6.0, 5.6.1, 5.7.3 and 5.8.0 releases of perl. Probing
+    this information can be rather time consuming so patches are welcomed
+    for earlier versions.
 
 HISTORY
+    1.6 19th July 2002
+        Included Config as a shipped module for all releases of perl (caught
+        by Mark Fowler)
+
+        Added data for the 5.8 release.
+
     1.5 2nd April 2002
         Fixed a glaring bug caught by the testsuite but sadly released.
         perl5.004_05 was released post 5.005_03 and so isn't the first
