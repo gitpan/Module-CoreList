@@ -1,14 +1,11 @@
---- #YAML:1.0
-name: Module-CoreList
-version: 1.98
-author:
-  - Richard Clamp E<lt>richardc@unixbeard.netE<gt>
-abstract: what modules shipped with versions of perl
-license: perl
+# http://module-build.sourceforge.net/META-spec.html
+#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
+name:         Module-CoreList
+version:      1.99
+version_from: lib/Module/CoreList.pm
+installdirs:  site
 requires:
-  Test::More: 0
-provides:
-  Module::CoreList:
-    file: lib/Module/CoreList.pm
-    version: 1.98
-generated_by: Module::Build version 0.25
+    Test::More:                    0
+
+distribution_type: module
+generated_by: ExtUtils::MakeMaker version 6.17

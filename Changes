@@ -1,3 +1,8 @@
+1.99	Tuesday 5th April, 2005
+	Backport to CPAN the version of Module::CoreList shipped with
+	perl 5.9.2 (containing info for this latest distribution).
+	Install in coreperl instead of sitelib for perls >= 5.9.2.
+
 1.98	Saturday 1st January, 2005
 	Data from José Pedro Oliveira for 5.8.6
 
