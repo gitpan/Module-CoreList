@@ -1,66 +1,427 @@
 package Module::CoreList;
+#       $Id: CoreList.pm,v 1.19 2002/04/03 22:05:12 richardc Exp $
+
 use strict;
 use Carp;
-use vars qw/$VERSION %version/;
-$VERSION = '1.4';
+use vars qw/$VERSION %released %version/;
+$VERSION = '1.5';
+
+=head1 NAME
+
+Module::CoreList - what modules shipped with versions of perl
+
+=head1 SYNOPSIS
+
+ use Module::CoreList;
+
+ print $Module::CoreList::version{5.00503}{CPAN}; # prints 1.48
+
+ print Module::CoreList->first_release('File::Spec');       # prints 5.00503
+ print Module::CoreList->first_release('File::Spec', 0.82); # prints 5.006001
+
+=head1 DESCRIPTION
+
+Module::CoreList contains the hash of hashes
+%Module::CoreList::version, this is keyed on perl version as indicated
+in $].  The second level hash is module => version pairs.
+
+Note, it is possible for the version of a module to be unspecified,
+whereby the value is undef, so use C<exists $version{$foo}{$bar}> if
+that's what you're testing for.
+
+It also contains %Module::CoreList::released hash, which has ISO
+formatted versions of the release dates, as gleaned from L<perlhist>
+
+=head1 CAVEATS
+
+Module::CoreList currently only covers the 5.003_07, 5.004, 5.004)05,
+5.005, 5.005_03, 5.6.0, 5.6.1 and 5.7.3 releases of perl.  Probing
+this information can be rather time consuming so patches are welcomed
+for earlier versions.
+
+=head1 HISTORY
+
+=over
+
+=item 1.5 2nd April 2002
+
+Fixed a glaring bug caught by the testsuite but sadly released.
+perl5.004_05 was released post 5.005_03 and so isn't the first release
+to contain File::Spec.
+
+Added data for 5.003_07, 5.004, and 5.005 releases.
+
+Added the %released hash.
+
+=item 1.4 2nd April 2002
+
+Bugfixes from Roland Bauer to allow the code to work under 5.004_04.
+
+Using a cgi developed by Roland caught and fixed a number of bugs in
+the previous extraction of module names.
+
+Rewrote the name extractor to be simpler.
+
+Added data for the 5.004_05 and 5.6.0 releases of perl.
+
+=item 1.3 25th March 2002.
+
+Initial CPAN release, covers 5.00503, 5.6.1 and 5.7.3
+
+=back
+
+=head1 AUTHOR
+
+Richard Clamp E<lt>richardc@unixbeard.netE<gt>
+
+=head1 COPYRIGHT
+
+Copyright (C) 2002 Richard Clamp.  All Rights Reserved.
+
+This module is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=head1 SEE ALSO
+
+L<Module::Info>, L<perl>
+
+=cut
+
+
+sub first_release {
+    my ($discard, $module, $version) = @_;
+
+    my @perls = $version
+        ? grep { exists $version{$_}{ $module } &&
+                        $version{$_}{ $module } >= $version } keys %version
+        : grep { exists $version{$_}{ $module }             } keys %version;
+
+    return unless @perls;
+    return (sort { $released{$a} cmp $released{$b} } @perls)[0];
+}
+
+
+# when things escaped
+%released = (
+             5.00307  => '1996-10-10',
+             5.004    => '1997-05-15',
+             5.005    => '1998-07-22',
+             5.00503  => '1999-03-28',
+             5.00405  => '1999-04-29',
+             5.006    => '2000-03-22',
+             5.006001 => '2001-04-08',
+             5.007003 => '2002-03-05',
+            );
 
 %version =
   (
-   5.00405
+   5.00307
+   => {
+       'AnyDBM_File'           => undef,  #./lib/AnyDBM_File.pm
+       'AutoLoader'            => undef,  #./lib/AutoLoader.pm
+       'AutoSplit'             => undef,  #./lib/AutoSplit.pm
+       'Benchmark'             => undef,  #./lib/Benchmark.pm
+       'Carp'                  => undef,  #./lib/Carp.pm
+       'Cwd'                   => undef,  #./lib/Cwd.pm
+       'DB_File'               => '1.03',  #./lib/DB_File.pm
+       'Devel::SelfStubber'    => '1.01',  #./lib/Devel/SelfStubber.pm
+       'diagnostics'           => undef,  #./lib/diagnostics.pm
+       'DirHandle'             => undef,  #./lib/DirHandle.pm
+       'DynaLoader'            => '1.00',  #./ext/DynaLoader/DynaLoader.pm
+       'English'               => undef,  #./lib/English.pm
+       'Env'                   => undef,  #./lib/Env.pm
+       'Exporter'              => undef,  #./lib/Exporter.pm
+       'ExtUtils::Embed'       => '1.18',  #./lib/ExtUtils/Embed.pm
+       'ExtUtils::Install'     => '1.15 ',  #./lib/ExtUtils/Install.pm
+       'ExtUtils::Liblist'     => '1.20 ',  #./lib/ExtUtils/Liblist.pm
+       'ExtUtils::MakeMaker'   => '5.38',  #./lib/ExtUtils/MakeMaker.pm
+       'ExtUtils::Manifest'    => '1.27',  #./lib/ExtUtils/Manifest.pm
+       'ExtUtils::Mkbootstrap' => '1.13 ',  #./lib/ExtUtils/Mkbootstrap.pm
+       'ExtUtils::Mksymlists'  => '1.12 ',  #./lib/ExtUtils/Mksymlists.pm
+       'ExtUtils::MM_OS2'      => undef,  #./lib/ExtUtils/MM_OS2.pm
+       'ExtUtils::MM_Unix'     => '1.107 ',  #./lib/ExtUtils/MM_Unix.pm
+       'ExtUtils::MM_VMS'      => undef,  #./lib/ExtUtils/MM_VMS.pm
+       'ExtUtils::testlib'     => '1.11 ',  #./lib/ExtUtils/testlib.pm
+       'Fatal'                 => undef,  #./lib/Fatal.pm
+       'Fcntl'                 => '1.00',  #./ext/Fcntl/Fcntl.pm
+       'File::Basename'        => '2.4',  #./lib/File/Basename.pm
+       'File::CheckTree'       => undef,  #./lib/File/CheckTree.pm
+       'File::Copy'            => '1.5',  #./lib/File/Copy.pm
+       'File::Find'            => undef,  #./lib/File/Find.pm
+       'File::Path'            => '1.01',  #./lib/File/Path.pm
+       'FileCache'             => undef,  #./lib/FileCache.pm
+       'FileHandle'            => '1.00',  #./ext/FileHandle/FileHandle.pm
+       'FindBin'               => '1.04',  #./lib/FindBin.pm
+       'GDBM_File'             => '1.00',  #./ext/GDBM_File/GDBM_File.pm
+       'Getopt::Long'          => '2.04',  #./lib/Getopt/Long.pm
+       'Getopt::Std'           => undef,  #./lib/Getopt/Std.pm
+       'I18N::Collate'         => undef,  #./lib/I18N/Collate.pm
+       'integer'               => undef,  #./lib/integer.pm
+       'IO'                    => undef,  #./ext/IO/IO.pm
+       'IO::File'              => '1.05',  #./ext/IO/lib/IO/File.pm
+       'IO::Handle'            => '1.12',  #./ext/IO/lib/IO/Handle.pm
+       'IO::Pipe'              => '1.07',  #./ext/IO/lib/IO/Pipe.pm
+       'IO::Seekable'          => '1.05',  #./ext/IO/lib/IO/Seekable.pm
+       'IO::Select'            => '1.09',  #./ext/IO/lib/IO/Select.pm
+       'IO::Socket'            => '1.13',  #./ext/IO/lib/IO/Socket.pm
+       'IPC::Open2'            => undef,  #./lib/IPC/Open2.pm
+       'IPC::Open3'            => undef,  #./lib/IPC/Open3.pm
+       'less'                  => undef,  #./lib/less.pm
+       'lib'                   => undef,  #./lib/lib.pm
+       'Math::BigFloat'        => undef,  #./lib/Math/BigFloat.pm
+       'Math::BigInt'          => undef,  #./lib/Math/BigInt.pm
+       'Math::Complex'         => undef,  #./lib/Math/Complex.pm
+       'NDBM_File'             => '1.00',  #./ext/NDBM_File/NDBM_File.pm
+       'Net::Ping'             => '1.01',  #./lib/Net/Ping.pm
+       'ODBM_File'             => '1.00',  #./ext/ODBM_File/ODBM_File.pm
+       'Opcode'                => '1.01',  #./ext/Opcode/Opcode.pm
+       'ops'                   => undef,  #./ext/Opcode/ops.pm
+       'OS2::ExtAttr'          => '0.01',  #./os2/OS2/ExtAttr/ExtAttr.pm
+       'OS2::PrfDB'            => '0.02',  #./os2/OS2/PrfDB/PrfDB.pm
+       'OS2::Process'          => undef,  #./os2/OS2/Process/Process.pm
+       'OS2::REXX'             => undef,  #./os2/OS2/REXX/REXX.pm
+       'overload'              => undef,  #./lib/overload.pm
+       'Pod::Functions'        => undef,  #./lib/Pod/Functions.pm
+       'Pod::Text'             => undef,  #./lib/Pod/Text.pm
+       'POSIX'                 => '1.00',  #./ext/POSIX/POSIX.pm
+       'Safe'                  => '2.06',  #./ext/Opcode/Safe.pm
+       'SDBM_File'             => '1.00',  #./ext/SDBM_File/SDBM_File.pm
+       'Search::Dict'          => undef,  #./lib/Search/Dict.pm
+       'SelectSaver'           => undef,  #./lib/SelectSaver.pm
+       'SelfLoader'            => '1.06',  #./lib/SelfLoader.pm
+       'Shell'                 => undef,  #./lib/Shell.pm
+       'sigtrap'               => '1.01',  #./lib/sigtrap.pm
+       'Socket'                => '1.5',  #./ext/Socket/Socket.pm
+       'strict'                => undef,  #./lib/strict.pm
+       'subs'                  => undef,  #./lib/subs.pm
+       'Symbol'                => undef,  #./lib/Symbol.pm
+       'Sys::Hostname'         => undef,  #./lib/Sys/Hostname.pm
+       'Sys::Syslog'           => undef,  #./lib/Sys/Syslog.pm
+       'Term::Cap'             => undef,  #./lib/Term/Cap.pm
+       'Term::Complete'        => undef,  #./lib/Term/Complete.pm
+       'Term::ReadLine'        => undef,  #./lib/Term/ReadLine.pm
+       'Test::Harness'         => '1.13',  #./lib/Test/Harness.pm
+       'Text::Abbrev'          => undef,  #./lib/Text/Abbrev.pm
+       'Text::ParseWords'      => undef,  #./lib/Text/ParseWords.pm
+       'Text::Soundex'         => undef,  #./lib/Text/Soundex.pm
+       'Text::Tabs'            => '96.051501',  #./lib/Text/Tabs.pm
+       'Text::Wrap'            => '96.041801',  #./lib/Text/Wrap.pm
+       'Tie::Hash'             => undef,  #./lib/Tie/Hash.pm
+       'Tie::Scalar'           => undef,  #./lib/Tie/Scalar.pm
+       'Tie::SubstrHash'       => undef,  #./lib/Tie/SubstrHash.pm
+       'Time::Local'           => undef,  #./lib/Time/Local.pm
+       'UNIVERSAL'             => undef,  #./lib/UNIVERSAL.pm
+       'vars'                  => undef,  #./lib/vars.pm
+       'VMS::Filespec'         => undef,  #./vms/ext/Filespec.pm
+       'VMS::Stdio'            => '2.0',  #./vms/ext/Stdio/Stdio.pm
+      },
+   5.004
    => {
        'AnyDBM_File'           => undef, #./lib/AnyDBM_File.pm
-       'attrs'                 => '0.1', #./lib/attrs.pm
-       'AutoLoader'            => '5.56', #./lib/AutoLoader.pm
-       'AutoSplit'             => '1.0303', #./lib/AutoSplit.pm
+       'AutoLoader'            => undef, #./lib/AutoLoader.pm
+       'AutoSplit'             => undef, #./lib/AutoSplit.pm
        'autouse'               => '1.01', #./lib/autouse.pm
+       'Benchmark'             => undef, #./lib/Benchmark.pm
+       'blib'                  => undef, #./lib/blib.pm
+       'Bundle::CPAN'          => '0.02', #./lib/Bundle/CPAN.pm
+       'Carp'                  => undef, #./lib/Carp.pm
+       'CGI'                   => '2.36', #./lib/CGI.pm
+       'CGI::Apache'           => '1.01', #./lib/CGI/Apache.pm
+       'CGI::Carp'             => '1.06', #./lib/CGI/Carp.pm
+       'CGI::Fast'             => '1.00a', #./lib/CGI/Fast.pm
+       'CGI::Push'             => '1.00', #./lib/CGI/Push.pm
+       'CGI::Switch'           => '0.05', #./lib/CGI/Switch.pm
+       'Class::Struct'         => undef, #./lib/Class/Struct.pm
+       'constant'              => '1.00', #./lib/constant.pm
+       'CPAN'                  => '1.2401', #./lib/CPAN.pm
+       'CPAN::FirstTime'       => '1.18 ', #./lib/CPAN/FirstTime.pm
+       'CPAN::Nox'             => undef, #./lib/CPAN/Nox.pm
+       'Cwd'                   => '2.00', #./lib/Cwd.pm
+       'DB_File'               => '1.14', #./ext/DB_File/DB_File.pm
+       'Devel::SelfStubber'    => '1.01', #./lib/Devel/SelfStubber.pm
+       'diagnostics'           => undef, #./lib/diagnostics.pm
+       'DirHandle'             => undef, #./lib/DirHandle.pm
+       'DynaLoader'            => '1.02', #./ext/DynaLoader/DynaLoader.pm
+       'English'               => undef, #./lib/English.pm
+       'Env'                   => undef, #./lib/Env.pm
+       'Exporter'              => undef, #./lib/Exporter.pm
+       'ExtUtils::Command'     => '1.00', #./lib/ExtUtils/Command.pm
+       'ExtUtils::Embed'       => '1.2501', #./lib/ExtUtils/Embed.pm
+       'ExtUtils::Install'     => '1.16 ', #./lib/ExtUtils/Install.pm
+       'ExtUtils::Liblist'     => '1.2201 ', #./lib/ExtUtils/Liblist.pm
+       'ExtUtils::MakeMaker'   => '5.4002', #./lib/ExtUtils/MakeMaker.pm
+       'ExtUtils::Manifest'    => '1.33 ', #./lib/ExtUtils/Manifest.pm
+       'ExtUtils::Mkbootstrap' => '1.13 ', #./lib/ExtUtils/Mkbootstrap.pm
+       'ExtUtils::Mksymlists'  => '1.13 ', #./lib/ExtUtils/Mksymlists.pm
+       'ExtUtils::MM_OS2'      => undef, #./lib/ExtUtils/MM_OS2.pm
+       'ExtUtils::MM_Unix'     => '1.114 ', #./lib/ExtUtils/MM_Unix.pm
+       'ExtUtils::MM_VMS'      => undef, #./lib/ExtUtils/MM_VMS.pm
+       'ExtUtils::MM_Win32'    => undef, #./lib/ExtUtils/MM_Win32.pm
+       'ExtUtils::testlib'     => '1.11 ', #./lib/ExtUtils/testlib.pm
+       'ExtUtils::XSSymSet'    => '1.0', #./vms/ext/XSSymSet.pm
+       'Fcntl'                 => '1.03', #./ext/Fcntl/Fcntl.pm
+       'File::Basename'        => '2.5', #./lib/File/Basename.pm
+       'File::CheckTree'       => undef, #./lib/File/CheckTree.pm
+       'File::Compare'         => '1.1001', #./lib/File/Compare.pm
+       'File::Copy'            => '2.02', #./lib/File/Copy.pm
+       'File::Find'            => undef, #./lib/File/Find.pm
+       'File::Path'            => '1.04', #./lib/File/Path.pm
+       'File::stat'            => undef, #./lib/File/stat.pm
+       'FileCache'             => undef, #./lib/FileCache.pm
+       'FileHandle'            => '2.00', #./lib/FileHandle.pm
+       'FindBin'               => '1.04', #./lib/FindBin.pm
+       'GDBM_File'             => '1.00', #./ext/GDBM_File/GDBM_File.pm
+       'Getopt::Long'          => '2.10', #./lib/Getopt/Long.pm
+       'Getopt::Std'           => undef, #./lib/Getopt/Std.pm
+       'I18N::Collate'         => undef, #./lib/I18N/Collate.pm
+       'integer'               => undef, #./lib/integer.pm
+       'IO'                    => undef, #./ext/IO/IO.pm
+       'IO::File'              => '1.0602', #./ext/IO/lib/IO/File.pm
+       'IO::Handle'            => '1.1504', #./ext/IO/lib/IO/Handle.pm
+       'IO::Pipe'              => '1.0901', #./ext/IO/lib/IO/Pipe.pm
+       'IO::Seekable'          => '1.06', #./ext/IO/lib/IO/Seekable.pm
+       'IO::Select'            => '1.10', #./ext/IO/lib/IO/Select.pm
+       'IO::Socket'            => '1.1602', #./ext/IO/lib/IO/Socket.pm
+       'IPC::Open2'            => '1.01', #./lib/IPC/Open2.pm
+       'IPC::Open3'            => '1.0101', #./lib/IPC/Open3.pm
+       'less'                  => undef, #./lib/less.pm
+       'lib'                   => undef, #./lib/lib.pm
+       'locale'                => undef, #./lib/locale.pm
+       'Math::BigFloat'        => undef, #./lib/Math/BigFloat.pm
+       'Math::BigInt'          => undef, #./lib/Math/BigInt.pm
+       'Math::Complex'         => '1.01', #./lib/Math/Complex.pm
+       'Math::Trig'            => '1', #./lib/Math/Trig.pm
+       'NDBM_File'             => '1.00', #./ext/NDBM_File/NDBM_File.pm
+       'Net::hostent'          => undef, #./lib/Net/hostent.pm
+       'Net::netent'           => undef, #./lib/Net/netent.pm
+       'Net::Ping'             => '2.02', #./lib/Net/Ping.pm
+       'Net::protoent'         => undef, #./lib/Net/protoent.pm
+       'Net::servent'          => undef, #./lib/Net/servent.pm
+       'ODBM_File'             => '1.00', #./ext/ODBM_File/ODBM_File.pm
+       'Opcode'                => '1.04', #./ext/Opcode/Opcode.pm
+       'ops'                   => undef, #./ext/Opcode/ops.pm
+       'Safe'                  => '2.06', #./ext/Opcode/Safe.pm
+       'OS2::ExtAttr'          => '0.01', #./os2/OS2/ExtAttr/ExtAttr.pm
+       'OS2::PrfDB'            => '0.02', #./os2/OS2/PrfDB/PrfDB.pm
+       'OS2::Process'          => undef, #./os2/OS2/Process/Process.pm
+       'OS2::REXX'             => undef, #./os2/OS2/REXX/REXX.pm
+       'overload'              => undef, #./lib/overload.pm
+       'Pod::Functions'        => undef, #./lib/Pod/Functions.pm
+       'Pod::Html'             => undef, #./lib/Pod/Html.pm
+       'Pod::Text'             => '1.0203', #./lib/Pod/Text.pm
+       'POSIX'                 => '1.02', #./ext/POSIX/POSIX.pm
+       'SDBM_File'             => '1.00', #./ext/SDBM_File/SDBM_File.pm
+       'Search::Dict'          => undef, #./lib/Search/Dict.pm
+       'SelectSaver'           => undef, #./lib/SelectSaver.pm
+       'SelfLoader'            => '1.07', #./lib/SelfLoader.pm
+       'Shell'                 => undef, #./lib/Shell.pm
+       'sigtrap'               => '1.02', #./lib/sigtrap.pm
+       'Socket'                => '1.6', #./ext/Socket/Socket.pm
+       'strict'                => undef, #./lib/strict.pm
+       'subs'                  => undef, #./lib/subs.pm
+       'Symbol'                => '1.02', #./lib/Symbol.pm
+       'Sys::Hostname'         => undef, #./lib/Sys/Hostname.pm
+       'Sys::Syslog'           => undef, #./lib/Sys/Syslog.pm
+       'Term::Cap'             => undef, #./lib/Term/Cap.pm
+       'Term::Complete'        => undef, #./lib/Term/Complete.pm
+       'Term::ReadLine'        => undef, #./lib/Term/ReadLine.pm
+       'Test::Harness'         => '1.1502', #./lib/Test/Harness.pm
+       'Text::Abbrev'          => undef, #./lib/Text/Abbrev.pm
+       'Text::ParseWords'      => undef, #./lib/Text/ParseWords.pm
+       'Text::Soundex'         => undef, #./lib/Text/Soundex.pm
+       'Text::Tabs'            => '96.121201', #./lib/Text/Tabs.pm
+       'Text::Wrap'            => '97.011701', #./lib/Text/Wrap.pm
+       'Tie::Hash'             => undef, #./lib/Tie/Hash.pm
+       'Tie::RefHash'          => undef, #./lib/Tie/RefHash.pm
+       'Tie::Scalar'           => undef, #./lib/Tie/Scalar.pm
+       'Tie::SubstrHash'       => undef, #./lib/Tie/SubstrHash.pm
+       'Time::gmtime'          => '1.01', #./lib/Time/gmtime.pm
+       'Time::Local'           => undef, #./lib/Time/Local.pm
+       'Time::localtime'       => '1.01', #./lib/Time/localtime.pm
+       'Time::tm'              => undef, #./lib/Time/tm.pm
+       'UNIVERSAL'             => undef, #./lib/UNIVERSAL.pm
+       'User::grent'           => undef, #./lib/User/grent.pm
+       'User::pwent'           => undef, #./lib/User/pwent.pm
+       'vars'                  => undef, #./lib/vars.pm
+       'VMS::DCLsym'           => '1.01', #./vms/ext/DCLsym/DCLsym.pm
+       'VMS::Filespec'         => undef, #./vms/ext/Filespec.pm
+       'VMS::Stdio'            => '2.02', #./vms/ext/Stdio/Stdio.pm
+       'vmsish'                => undef, #./vms/ext/vmsish.pm
+      },
+   5.005
+   => {
+       'AnyDBM_File'           => undef, #./lib/AnyDBM_File.pm
+       'attrs'                 => '1.0', #./ext/attrs/attrs.pm
+       'AutoLoader'            => undef, #./lib/AutoLoader.pm
+       'AutoSplit'             => '1.0302', #./lib/AutoSplit.pm
+       'autouse'               => '1.01', #./lib/autouse.pm
+       'B'                     => undef, #./ext/B/B.pm
+       'B::Asmdata'            => undef, #./ext/B/B/Asmdata.pm
+       'B::Assembler'          => undef, #./ext/B/B/Assembler.pm
+       'B::Bblock'             => undef, #./ext/B/B/Bblock.pm
+       'B::Bytecode'           => undef, #./ext/B/B/Bytecode.pm
+       'B::C'                  => undef, #./ext/B/B/C.pm
+       'B::CC'                 => undef, #./ext/B/B/CC.pm
+       'B::Debug'              => undef, #./ext/B/B/Debug.pm
+       'B::Deparse'            => '0.56', #./ext/B/B/Deparse.pm
+       'B::Disassembler'       => undef, #./ext/B/B/Disassembler.pm
+       'B::Lint'               => undef, #./ext/B/B/Lint.pm
+       'B::Showlex'            => undef, #./ext/B/B/Showlex.pm
+       'B::Stackobj'           => undef, #./ext/B/B/Stackobj.pm
+       'B::Terse'              => undef, #./ext/B/B/Terse.pm
+       'B::Xref'               => undef, #./ext/B/B/Xref.pm
        'base'                  => undef, #./lib/base.pm
        'Benchmark'             => undef, #./lib/Benchmark.pm
        'blib'                  => '1.00', #./lib/blib.pm
-       'Bundle::CPAN'          => '0.03', #./lib/Bundle/CPAN.pm
        'Carp'                  => undef, #./lib/Carp.pm
        'CGI'                   => '2.42', #./lib/CGI.pm
        'CGI::Apache'           => '1.1', #./lib/CGI/Apache.pm
-       'CGI::Carp'             => '1.10', #./lib/CGI/Carp.pm
+       'CGI::Carp'             => '1.101', #./lib/CGI/Carp.pm
        'CGI::Cookie'           => '1.06', #./lib/CGI/Cookie.pm
        'CGI::Fast'             => '1.00a', #./lib/CGI/Fast.pm
        'CGI::Push'             => '1.01', #./lib/CGI/Push.pm
        'CGI::Switch'           => '0.06', #./lib/CGI/Switch.pm
        'Class::Struct'         => undef, #./lib/Class/Struct.pm
        'constant'              => '1.00', #./lib/constant.pm
-       'CPAN'                  => '1.40', #./lib/CPAN.pm
-       'CPAN::FirstTime'       => '1.30 ', #./lib/CPAN/FirstTime.pm
+       'CPAN'                  => '1.3901', #./lib/CPAN.pm
+       'CPAN::FirstTime'       => '1.29 ', #./lib/CPAN/FirstTime.pm
        'CPAN::Nox'             => undef, #./lib/CPAN/Nox.pm
        'Cwd'                   => '2.01', #./lib/Cwd.pm
-       'DB_File'               => '1.15', #./ext/DB_File/DB_File.pm
+       'Data::Dumper'          => '2.09', #./ext/Data/Dumper/Dumper.pm
+       'DB_File'               => '1.60', #./ext/DB_File/DB_File.pm
        'Devel::SelfStubber'    => '1.01', #./lib/Devel/SelfStubber.pm
+       'DynaLoader'            => '1.03',
        'diagnostics'           => undef, #./lib/diagnostics.pm
        'DirHandle'             => undef, #./lib/DirHandle.pm
-       'DynaLoader'            => '1.03',
        'English'               => undef, #./lib/English.pm
        'Env'                   => undef, #./lib/Env.pm
        'Exporter'              => undef, #./lib/Exporter.pm
        'ExtUtils::Command'     => '1.01', #./lib/ExtUtils/Command.pm
        'ExtUtils::Embed'       => '1.2505', #./lib/ExtUtils/Embed.pm
        'ExtUtils::Install'     => '1.28 ', #./lib/ExtUtils/Install.pm
+       'ExtUtils::Installed'   => '0.02', #./lib/ExtUtils/Installed.pm
        'ExtUtils::Liblist'     => '1.25 ', #./lib/ExtUtils/Liblist.pm
-       'ExtUtils::MakeMaker'   => '5.42', #./lib/ExtUtils/MakeMaker.pm
+       'ExtUtils::MakeMaker'   => '5.4301', #./lib/ExtUtils/MakeMaker.pm
        'ExtUtils::Manifest'    => '1.33 ', #./lib/ExtUtils/Manifest.pm
-       'ExtUtils::Mkbootstrap' => '1.14 ', #./lib/ExtUtils/Mkbootstrap.pm
-       'ExtUtils::Mksymlists'  => '1.16 ', #./lib/ExtUtils/Mksymlists.pm
+       'ExtUtils::Mkbootstrap' => '1.13 ', #./lib/ExtUtils/Mkbootstrap.pm
+       'ExtUtils::Mksymlists'  => '1.17 ', #./lib/ExtUtils/Mksymlists.pm
        'ExtUtils::MM_OS2'      => undef, #./lib/ExtUtils/MM_OS2.pm
-       'ExtUtils::MM_Unix'     => '1.118 ', #./lib/ExtUtils/MM_Unix.pm
+       'ExtUtils::MM_Unix'     => '1.12601 ', #./lib/ExtUtils/MM_Unix.pm
        'ExtUtils::MM_VMS'      => undef, #./lib/ExtUtils/MM_VMS.pm
        'ExtUtils::MM_Win32'    => undef, #./lib/ExtUtils/MM_Win32.pm
+       'ExtUtils::Packlist'    => '0.03', #./lib/ExtUtils/Packlist.pm
        'ExtUtils::testlib'     => '1.11 ', #./lib/ExtUtils/testlib.pm
        'ExtUtils::XSSymSet'    => '1.0', #./vms/ext/XSSymSet.pm
+       'Fatal'                 => '1.02', #./lib/Fatal.pm
        'Fcntl'                 => '1.03', #./ext/Fcntl/Fcntl.pm
+       'fields'                => '0.02', #./lib/fields.pm
        'File::Basename'        => '2.6', #./lib/File/Basename.pm
        'File::CheckTree'       => undef, #./lib/File/CheckTree.pm
        'File::Compare'         => '1.1001', #./lib/File/Compare.pm
        'File::Copy'            => '2.02', #./lib/File/Copy.pm
        'File::DosGlob'         => undef, #./lib/File/DosGlob.pm
        'File::Find'            => undef, #./lib/File/Find.pm
-       'File::Path'            => '1.0402', #./lib/File/Path.pm
+       'File::Path'            => '1.0401', #./lib/File/Path.pm
        'File::Spec'            => '0.6', #./lib/File/Spec.pm
        'File::Spec::Mac'       => '1.0', #./lib/File/Spec/Mac.pm
        'File::Spec::OS2'       => undef, #./lib/File/Spec/OS2.pm
@@ -72,19 +433,22 @@ $VERSION = '1.4';
        'FileHandle'            => '2.00', #./lib/FileHandle.pm
        'FindBin'               => '1.41', #./lib/FindBin.pm
        'GDBM_File'             => '1.00', #./ext/GDBM_File/GDBM_File.pm
-       'Getopt::Long'          => '2.19', #./lib/Getopt/Long.pm
+       'Getopt::Long'          => '2.17', #./lib/Getopt/Long.pm
        'Getopt::Std'           => undef, #./lib/Getopt/Std.pm
        'I18N::Collate'         => undef, #./lib/I18N/Collate.pm
        'integer'               => undef, #./lib/integer.pm
        'IO'                    => undef, #./ext/IO/IO.pm
        'IO::File'              => '1.06021', #./ext/IO/lib/IO/File.pm
-       'IO::Handle'            => '1.1504', #./ext/IO/lib/IO/Handle.pm
+       'IO::Handle'            => '1.1505', #./ext/IO/lib/IO/Handle.pm
        'IO::Pipe'              => '1.0901', #./ext/IO/lib/IO/Pipe.pm
        'IO::Seekable'          => '1.06', #./ext/IO/lib/IO/Seekable.pm
        'IO::Select'            => '1.10', #./ext/IO/lib/IO/Select.pm
        'IO::Socket'            => '1.1603', #./ext/IO/lib/IO/Socket.pm
        'IPC::Open2'            => '1.01', #./lib/IPC/Open2.pm
-       'IPC::Open3'            => '1.0103', #./lib/IPC/Open3.pm
+       'IPC::Open3'            => '1.0102', #./lib/IPC/Open3.pm
+       'IPC::Msg'              => '1.00', #./ext/IPC/SysV/Msg.pm
+       'IPC::Semaphore'        => '1.00', #./ext/IPC/SysV/Semaphore.pm
+       'IPC::SysV'             => '1.03', #./ext/IPC/SysV/SysV.pm
        'less'                  => undef, #./lib/less.pm
        'lib'                   => undef, #./lib/lib.pm
        'locale'                => undef, #./lib/locale.pm
@@ -98,20 +462,21 @@ $VERSION = '1.4';
        'Net::Ping'             => '2.02', #./lib/Net/Ping.pm
        'Net::protoent'         => undef, #./lib/Net/protoent.pm
        'Net::servent'          => undef, #./lib/Net/servent.pm
+       'O'                     => undef, #./ext/B/O.pm
        'ODBM_File'             => '1.00', #./ext/ODBM_File/ODBM_File.pm
        'Opcode'                => '1.04', #./ext/Opcode/Opcode.pm
        'ops'                   => undef, #./ext/Opcode/ops.pm
+       'Safe'                  => '2.06', #./ext/Opcode/Safe.pm
        'OS2::ExtAttr'          => '0.01', #./os2/OS2/ExtAttr/ExtAttr.pm
        'OS2::PrfDB'            => '0.02', #./os2/OS2/PrfDB/PrfDB.pm
-       'OS2::Process'          => undef, #./os2/OS2/Process/Process.pm
+       'OS2::Process'          => '0.2', #./os2/OS2/Process/Process.pm
        'OS2::REXX'             => undef, #./os2/OS2/REXX/REXX.pm
        'overload'              => undef, #./lib/overload.pm
        'Pod::Functions'        => undef, #./lib/Pod/Functions.pm
-       'Pod::Html'             => '1.0101', #./lib/Pod/Html.pm
-       'Pod::Text'             => '1.0204', #./lib/Pod/Text.pm
+       'Pod::Html'             => '1.01', #./lib/Pod/Html.pm
+       'Pod::Text'             => '1.0203', #./lib/Pod/Text.pm
        'POSIX'                 => '1.02', #./ext/POSIX/POSIX.pm
-       're'                    => undef, #./lib/re.pm
-       'Safe'                  => '2.06', #./ext/Opcode/Safe.pm
+       're'                    => '0.02', #./ext/re/re.pm
        'SDBM_File'             => '1.00', #./ext/SDBM_File/SDBM_File.pm
        'Search::Dict'          => undef, #./lib/Search/Dict.pm
        'SelectSaver'           => undef, #./lib/SelectSaver.pm
@@ -130,10 +495,16 @@ $VERSION = '1.4';
        'Test'                  => '1.04', #./lib/Test.pm
        'Test::Harness'         => '1.1602', #./lib/Test/Harness.pm
        'Text::Abbrev'          => undef, #./lib/Text/Abbrev.pm
-       'Text::ParseWords'      => '3.1001', #./lib/Text/ParseWords.pm
+       'Text::ParseWords'      => '3.1', #./lib/Text/ParseWords.pm
        'Text::Soundex'         => undef, #./lib/Text/Soundex.pm
        'Text::Tabs'            => '96.121201', #./lib/Text/Tabs.pm
-       'Text::Wrap'            => '98.112902', #./lib/Text/Wrap.pm
+       'Text::Wrap'            => '97.02', #./lib/Text/Wrap.pm
+       'Thread'                => '1.0', #./ext/Thread/Thread.pm
+       'Thread::Queue'         => undef, #./ext/Thread/Thread/Queue.pm
+       'Thread::Semaphore'     => undef, #./ext/Thread/Thread/Semaphore.pm
+       'Thread::Signal'        => undef, #./ext/Thread/Thread/Signal.pm
+       'Thread::Specific'      => undef, #./ext/Thread/Thread/Specific.pm
+       'Tie::Array'            => '1.00', #./lib/Tie/Array.pm
        'Tie::Handle'           => undef, #./lib/Tie/Handle.pm
        'Tie::Hash'             => undef, #./lib/Tie/Hash.pm
        'Tie::RefHash'          => undef, #./lib/Tie/RefHash.pm
@@ -149,7 +520,7 @@ $VERSION = '1.4';
        'vars'                  => undef, #./lib/vars.pm
        'VMS::DCLsym'           => '1.01', #./vms/ext/DCLsym/DCLsym.pm
        'VMS::Filespec'         => undef, #./vms/ext/Filespec.pm
-       'VMS::Stdio'            => '2.02', #./vms/ext/Stdio/Stdio.pm
+       'VMS::Stdio'            => '2.1', #./vms/ext/Stdio/Stdio.pm
        'vmsish'                => undef, #./vms/ext/vmsish.pm
       },
    5.00503
@@ -327,6 +698,152 @@ $VERSION = '1.4';
        'VMS::Filespec'         => undef,
        'VMS::Stdio'            => 2.1,
        'vmsish'                => undef,
+      },
+   5.00405
+   => {
+       'AnyDBM_File'           => undef, #./lib/AnyDBM_File.pm
+       'attrs'                 => '0.1', #./lib/attrs.pm
+       'AutoLoader'            => '5.56', #./lib/AutoLoader.pm
+       'AutoSplit'             => '1.0303', #./lib/AutoSplit.pm
+       'autouse'               => '1.01', #./lib/autouse.pm
+       'base'                  => undef, #./lib/base.pm
+       'Benchmark'             => undef, #./lib/Benchmark.pm
+       'blib'                  => '1.00', #./lib/blib.pm
+       'Bundle::CPAN'          => '0.03', #./lib/Bundle/CPAN.pm
+       'Carp'                  => undef, #./lib/Carp.pm
+       'CGI'                   => '2.42', #./lib/CGI.pm
+       'CGI::Apache'           => '1.1', #./lib/CGI/Apache.pm
+       'CGI::Carp'             => '1.10', #./lib/CGI/Carp.pm
+       'CGI::Cookie'           => '1.06', #./lib/CGI/Cookie.pm
+       'CGI::Fast'             => '1.00a', #./lib/CGI/Fast.pm
+       'CGI::Push'             => '1.01', #./lib/CGI/Push.pm
+       'CGI::Switch'           => '0.06', #./lib/CGI/Switch.pm
+       'Class::Struct'         => undef, #./lib/Class/Struct.pm
+       'constant'              => '1.00', #./lib/constant.pm
+       'CPAN'                  => '1.40', #./lib/CPAN.pm
+       'CPAN::FirstTime'       => '1.30 ', #./lib/CPAN/FirstTime.pm
+       'CPAN::Nox'             => undef, #./lib/CPAN/Nox.pm
+       'Cwd'                   => '2.01', #./lib/Cwd.pm
+       'DB_File'               => '1.15', #./ext/DB_File/DB_File.pm
+       'Devel::SelfStubber'    => '1.01', #./lib/Devel/SelfStubber.pm
+       'diagnostics'           => undef, #./lib/diagnostics.pm
+       'DirHandle'             => undef, #./lib/DirHandle.pm
+       'DynaLoader'            => '1.03',
+       'English'               => undef, #./lib/English.pm
+       'Env'                   => undef, #./lib/Env.pm
+       'Exporter'              => undef, #./lib/Exporter.pm
+       'ExtUtils::Command'     => '1.01', #./lib/ExtUtils/Command.pm
+       'ExtUtils::Embed'       => '1.2505', #./lib/ExtUtils/Embed.pm
+       'ExtUtils::Install'     => '1.28 ', #./lib/ExtUtils/Install.pm
+       'ExtUtils::Liblist'     => '1.25 ', #./lib/ExtUtils/Liblist.pm
+       'ExtUtils::MakeMaker'   => '5.42', #./lib/ExtUtils/MakeMaker.pm
+       'ExtUtils::Manifest'    => '1.33 ', #./lib/ExtUtils/Manifest.pm
+       'ExtUtils::Mkbootstrap' => '1.14 ', #./lib/ExtUtils/Mkbootstrap.pm
+       'ExtUtils::Mksymlists'  => '1.16 ', #./lib/ExtUtils/Mksymlists.pm
+       'ExtUtils::MM_OS2'      => undef, #./lib/ExtUtils/MM_OS2.pm
+       'ExtUtils::MM_Unix'     => '1.118 ', #./lib/ExtUtils/MM_Unix.pm
+       'ExtUtils::MM_VMS'      => undef, #./lib/ExtUtils/MM_VMS.pm
+       'ExtUtils::MM_Win32'    => undef, #./lib/ExtUtils/MM_Win32.pm
+       'ExtUtils::testlib'     => '1.11 ', #./lib/ExtUtils/testlib.pm
+       'ExtUtils::XSSymSet'    => '1.0', #./vms/ext/XSSymSet.pm
+       'Fcntl'                 => '1.03', #./ext/Fcntl/Fcntl.pm
+       'File::Basename'        => '2.6', #./lib/File/Basename.pm
+       'File::CheckTree'       => undef, #./lib/File/CheckTree.pm
+       'File::Compare'         => '1.1001', #./lib/File/Compare.pm
+       'File::Copy'            => '2.02', #./lib/File/Copy.pm
+       'File::DosGlob'         => undef, #./lib/File/DosGlob.pm
+       'File::Find'            => undef, #./lib/File/Find.pm
+       'File::Path'            => '1.0402', #./lib/File/Path.pm
+       'File::Spec'            => '0.6', #./lib/File/Spec.pm
+       'File::Spec::Mac'       => '1.0', #./lib/File/Spec/Mac.pm
+       'File::Spec::OS2'       => undef, #./lib/File/Spec/OS2.pm
+       'File::Spec::Unix'      => undef, #./lib/File/Spec/Unix.pm
+       'File::Spec::VMS'       => undef, #./lib/File/Spec/VMS.pm
+       'File::Spec::Win32'     => undef, #./lib/File/Spec/Win32.pm
+       'File::stat'            => undef, #./lib/File/stat.pm
+       'FileCache'             => undef, #./lib/FileCache.pm
+       'FileHandle'            => '2.00', #./lib/FileHandle.pm
+       'FindBin'               => '1.41', #./lib/FindBin.pm
+       'GDBM_File'             => '1.00', #./ext/GDBM_File/GDBM_File.pm
+       'Getopt::Long'          => '2.19', #./lib/Getopt/Long.pm
+       'Getopt::Std'           => undef, #./lib/Getopt/Std.pm
+       'I18N::Collate'         => undef, #./lib/I18N/Collate.pm
+       'integer'               => undef, #./lib/integer.pm
+       'IO'                    => undef, #./ext/IO/IO.pm
+       'IO::File'              => '1.06021', #./ext/IO/lib/IO/File.pm
+       'IO::Handle'            => '1.1504', #./ext/IO/lib/IO/Handle.pm
+       'IO::Pipe'              => '1.0901', #./ext/IO/lib/IO/Pipe.pm
+       'IO::Seekable'          => '1.06', #./ext/IO/lib/IO/Seekable.pm
+       'IO::Select'            => '1.10', #./ext/IO/lib/IO/Select.pm
+       'IO::Socket'            => '1.1603', #./ext/IO/lib/IO/Socket.pm
+       'IPC::Open2'            => '1.01', #./lib/IPC/Open2.pm
+       'IPC::Open3'            => '1.0103', #./lib/IPC/Open3.pm
+       'less'                  => undef, #./lib/less.pm
+       'lib'                   => undef, #./lib/lib.pm
+       'locale'                => undef, #./lib/locale.pm
+       'Math::BigFloat'        => undef, #./lib/Math/BigFloat.pm
+       'Math::BigInt'          => undef, #./lib/Math/BigInt.pm
+       'Math::Complex'         => '1.25', #./lib/Math/Complex.pm
+       'Math::Trig'            => '1', #./lib/Math/Trig.pm
+       'NDBM_File'             => '1.01', #./ext/NDBM_File/NDBM_File.pm
+       'Net::hostent'          => undef, #./lib/Net/hostent.pm
+       'Net::netent'           => undef, #./lib/Net/netent.pm
+       'Net::Ping'             => '2.02', #./lib/Net/Ping.pm
+       'Net::protoent'         => undef, #./lib/Net/protoent.pm
+       'Net::servent'          => undef, #./lib/Net/servent.pm
+       'ODBM_File'             => '1.00', #./ext/ODBM_File/ODBM_File.pm
+       'Opcode'                => '1.04', #./ext/Opcode/Opcode.pm
+       'ops'                   => undef, #./ext/Opcode/ops.pm
+       'OS2::ExtAttr'          => '0.01', #./os2/OS2/ExtAttr/ExtAttr.pm
+       'OS2::PrfDB'            => '0.02', #./os2/OS2/PrfDB/PrfDB.pm
+       'OS2::Process'          => undef, #./os2/OS2/Process/Process.pm
+       'OS2::REXX'             => undef, #./os2/OS2/REXX/REXX.pm
+       'overload'              => undef, #./lib/overload.pm
+       'Pod::Functions'        => undef, #./lib/Pod/Functions.pm
+       'Pod::Html'             => '1.0101', #./lib/Pod/Html.pm
+       'Pod::Text'             => '1.0204', #./lib/Pod/Text.pm
+       'POSIX'                 => '1.02', #./ext/POSIX/POSIX.pm
+       're'                    => undef, #./lib/re.pm
+       'Safe'                  => '2.06', #./ext/Opcode/Safe.pm
+       'SDBM_File'             => '1.00', #./ext/SDBM_File/SDBM_File.pm
+       'Search::Dict'          => undef, #./lib/Search/Dict.pm
+       'SelectSaver'           => undef, #./lib/SelectSaver.pm
+       'SelfLoader'            => '1.08', #./lib/SelfLoader.pm
+       'Shell'                 => undef, #./lib/Shell.pm
+       'sigtrap'               => '1.02', #./lib/sigtrap.pm
+       'Socket'                => '1.7', #./ext/Socket/Socket.pm
+       'strict'                => '1.01', #./lib/strict.pm
+       'subs'                  => undef, #./lib/subs.pm
+       'Symbol'                => '1.02', #./lib/Symbol.pm
+       'Sys::Hostname'         => undef, #./lib/Sys/Hostname.pm
+       'Sys::Syslog'           => undef, #./lib/Sys/Syslog.pm
+       'Term::Cap'             => undef, #./lib/Term/Cap.pm
+       'Term::Complete'        => undef, #./lib/Term/Complete.pm
+       'Term::ReadLine'        => undef, #./lib/Term/ReadLine.pm
+       'Test'                  => '1.04', #./lib/Test.pm
+       'Test::Harness'         => '1.1602', #./lib/Test/Harness.pm
+       'Text::Abbrev'          => undef, #./lib/Text/Abbrev.pm
+       'Text::ParseWords'      => '3.1001', #./lib/Text/ParseWords.pm
+       'Text::Soundex'         => undef, #./lib/Text/Soundex.pm
+       'Text::Tabs'            => '96.121201', #./lib/Text/Tabs.pm
+       'Text::Wrap'            => '98.112902', #./lib/Text/Wrap.pm
+       'Tie::Handle'           => undef, #./lib/Tie/Handle.pm
+       'Tie::Hash'             => undef, #./lib/Tie/Hash.pm
+       'Tie::RefHash'          => undef, #./lib/Tie/RefHash.pm
+       'Tie::Scalar'           => undef, #./lib/Tie/Scalar.pm
+       'Tie::SubstrHash'       => undef, #./lib/Tie/SubstrHash.pm
+       'Time::gmtime'          => '1.01', #./lib/Time/gmtime.pm
+       'Time::Local'           => undef, #./lib/Time/Local.pm
+       'Time::localtime'       => '1.01', #./lib/Time/localtime.pm
+       'Time::tm'              => undef, #./lib/Time/tm.pm
+       'UNIVERSAL'             => undef, #./lib/UNIVERSAL.pm
+       'User::grent'           => undef, #./lib/User/grent.pm
+       'User::pwent'           => undef, #./lib/User/pwent.pm
+       'vars'                  => undef, #./lib/vars.pm
+       'VMS::DCLsym'           => '1.01', #./vms/ext/DCLsym/DCLsym.pm
+       'VMS::Filespec'         => undef, #./vms/ext/Filespec.pm
+       'VMS::Stdio'            => '2.02', #./vms/ext/Stdio/Stdio.pm
+       'vmsish'                => undef, #./vms/ext/vmsish.pm
       },
    5.006
    => {
@@ -1086,83 +1603,5 @@ $VERSION = '1.4';
       },
   );
 
-sub first_release {
-    my ($discard, $module, $version) = @_;
-
-    my @perls = $version
-        ? grep { $version{$_}{ $module } >= $version } keys %version
-        : grep { defined $version{$_}{ $module }     } keys %version;
-
-    return unless @perls;
-    return (sort { $a <=> $b } @perls)[0];
-}
-
 1;
 __END__
-
-=head1 NAME
-
-Module::CoreList - what modules shipped with versions of perl
-
-=head1 SYNOPSIS
-
- use Module::CoreList;
-
- print $Module::CoreList::version{5.00503}{CPAN}; # prints 1.48
-
- print Module::CoreList->first_release('File::Spec');       # prints 5.00503
- print Module::CoreList->first_release('File::Spec', 0.82); # prints 5.006001
-
-=head1 DESCRIPTION
-
-Module::CoreList contains the hash of hashes
-%Module::CoreList::version, this is keyed on perl version as indicated
-in $].  The second level hash is module => version pairs.
-
-Note, it is possible for the version of a module to be unspecified,
-whereby the value is undef, so use C<exists $version{$foo}{$bar}> if
-that's what you're testing for.
-
-=head1 CAVEATS
-
-Module::CoreList currently only covers the 5.00405, 5.00503, 5.6.0,
-5.6.1 and 5.7.3 releases of perl.  Probing this information can be
-rather time consuming so patches are welcomed for earlier versions.
-
-=head1 HISTORY
-
-=over
-
-=item 1.4 2nd April 2002
-
-Bugfixes from Roland Bauer to allow the code to work under 5.004_04.
-
-Using a cgi developed by Roland caught and fixed a number of bugs in
-the previous extraction of module names.
-
-Rewrote the name extractor to be simpler.
-
-Added data for the 5.004_05 and 5.6.0 releases of perl.
-
-=item 1.3 25th March 2002.
-
-Initial CPAN release, covers 5.00503, 5.6.1 and 5.7.3
-
-=back
-
-=head1 AUTHOR
-
-Richard Clamp E<lt>richardc@unixbeard.netE<gt>
-
-=head1 COPYRIGHT
-
-Copyright (C) 2002 Richard Clamp.  All Rights Reserved.
-
-This module is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-
-=head1 SEE ALSO
-
-L<Module::Info>, L<perl>
-
-=cut

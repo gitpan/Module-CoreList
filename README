@@ -18,12 +18,25 @@ DESCRIPTION
     whereby the value is undef, so use "exists $version{$foo}{$bar}" if
     that's what you're testing for.
 
+    It also contains %Module::CoreList::released hash, which has ISO
+    formatted versions of the release dates, as gleaned from perlhist
+
 CAVEATS
-    Module::CoreList currently only covers the 5.00405, 5.00503, 5.6.0,
-    5.6.1 and 5.7.3 releases of perl. Probing this information can be rather
-    time consuming so patches are welcomed for earlier versions.
+    Module::CoreList currently only covers the 5.003_07, 5.004, 5.004)05,
+    5.005, 5.005_03, 5.6.0, 5.6.1 and 5.7.3 releases of perl. Probing this
+    information can be rather time consuming so patches are welcomed for
+    earlier versions.
 
 HISTORY
+    1.5 2nd April 2002
+        Fixed a glaring bug caught by the testsuite but sadly released.
+        perl5.004_05 was released post 5.005_03 and so isn't the first
+        release to contain File::Spec.
+
+        Added data for 5.003_07, 5.004, and 5.005 releases.
+
+        Added the %released hash.
+
     1.4 2nd April 2002
         Bugfixes from Roland Bauer to allow the code to work under 5.004_04.
 
