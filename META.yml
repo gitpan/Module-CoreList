@@ -1,16 +1,15 @@
 --- #YAML:1.0
 name: Module-CoreList
-version: 1.93
+version: 1.94
+author:
+  - Richard Clamp E<lt>richardc@unixbeard.netE<gt>
+abstract: what modules shipped with versions of perl
 license: perl
-distribution_type: module
 requires:
   Module::Build: 0.18
   Test::More: 0
-recommends: {}
-build_requires: {}
-conflicts: {}
 provides:
   Module::CoreList:
     file: lib/Module/CoreList.pm
-    version: 1.93
-generated_by: Module::Build version 0.21
+    version: 1.94
+generated_by: Module::Build version 0.25

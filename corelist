@@ -21,8 +21,13 @@ See L<Module::CoreList> for one.
     utf8  was first released with perl 5.006
       5.006      undef
       5.006001   undef
+      5.006002   undef
       5.007003   1.00
       5.008      1.00
+      5.008001   1.02
+      5.008002   1.02
+      5.008003   1.02
+      5.009      1.02
 
 =head2 -?
 

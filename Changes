@@ -1,3 +1,8 @@
+1.94	Monday 12th July, 2004
+	Applied fixes from Lars Thegler (rt.cpan.org tickets #6919,
+	#6920, #6922, and #6923)
+	Data from Jose Pedro Oliveira for 5.005_04, 5.8.3, and 5.9.1.
+
 1.93	Friday 14th November, 2003
 	Data for 5.9.0 and 5.6.2
 
