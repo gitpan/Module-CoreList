@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: Module-CoreList
-version: 1.92
+version: 1.93
 license: perl
 distribution_type: module
 requires:
@@ -12,5 +12,5 @@ conflicts: {}
 provides:
   Module::CoreList:
     file: lib/Module/CoreList.pm
-    version: 1.92
+    version: 1.93
 generated_by: Module::Build version 0.21
