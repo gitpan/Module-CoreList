@@ -1,5 +1,5 @@
 use strict;
-use Module::Build;
+use Module::Build 0.18;
 
 Module::Build->new(
     module_name => "Module::CoreList",
@@ -7,8 +7,7 @@ Module::Build->new(
     script_files => [ 'corelist' ],
     requires    => {
         'Test::More'      => 0,
-        'Module::Build'   => '0.18', # shabang line fixup
     },
-    create_makefile_pl => 'passthrough',
+    create_makefile_pl => 'traditional',
    )
   ->create_build_script;
