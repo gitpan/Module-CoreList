@@ -10,11 +10,21 @@ See L<Module::CoreList> for one.
 
 =head1 SYNOPSIS
 
-    corelist [-help] [-man] [-v [ version ] ] [ Modulename [ version ] ]
+    corelist [-help] [-a] [-man] [-v [ version ]] [ Modulename [ version ]]
 
 =head1 OPTIONS
 
-=head2 [-?]
+=head2 a
+
+    corelist -a utf8
+
+    utf8  was first released with perl 5.006
+      5.006      undef
+      5.006001   undef
+      5.007003   1.00
+      5.008      1.00
+
+=head2 -?
 
 help! help! help! to see more help, try --man.
 
@@ -39,7 +49,7 @@ use strict;
 
 my %Opts;
 
-GetOptions(\%Opts, qw[ help|?! man! v|version:f ] );
+GetOptions(\%Opts, qw[ help|?! man! v|version:f a! ] );
 
 pod2usage(1) if $Opts{help};
 pod2usage(-verbose=>2) if $Opts{man};
@@ -62,8 +72,9 @@ if(exists $Opts{v} ){
 }elsif(@ARGV){
     module_version(@ARGV);
 } else {
-    pod2usage(0)
+    pod2usage(0);
 }
+
 exit();
 
 sub module_version {
@@ -83,6 +94,20 @@ sub module_version {
     }
 
     print "\n",$msg,"\n";
+    
+    if(defined $ret and exists $Opts{a} and $Opts{a}){
+        for my $v(
+#            grep { $ret ne $_ }
+            sort keys %Module::CoreList::version ){
+
+            printf "  %-10s %-10s\n",
+                $v,
+                $Module::CoreList::version{$v}{$mod}
+                    || 'undef'
+                    if exists $Module::CoreList::version{$v}{$mod};
+        }
+        print "\n";
+    }
 }
 
 

@@ -1,0 +1,16 @@
+--- #YAML:1.0
+name: Module-CoreList
+version: 1.92
+license: perl
+distribution_type: module
+requires:
+  Module::Build: 0.18
+  Test::More: 0
+recommends: {}
+build_requires: {}
+conflicts: {}
+provides:
+  Module::CoreList:
+    file: lib/Module/CoreList.pm
+    version: 1.92
+generated_by: Module::Build version 0.21
