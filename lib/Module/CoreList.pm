@@ -1,7 +1,7 @@
 package Module::CoreList;
 use strict;
-use vars qw/$VERSION %released %version/;
-$VERSION = '1.95';
+use vars qw/$VERSION %released %version %families/;
+$VERSION = '1.96';
 
 =head1 NAME
 
@@ -16,6 +16,9 @@ Module::CoreList - what modules shipped with versions of perl
  print Module::CoreList->first_release('File::Spec');       # prints 5.00503
  print Module::CoreList->first_release('File::Spec', 0.82); # prints 5.006001
 
+ print join ", ", @{ $Module::CoreList::families{5.005} };
+    # prints "5.005, 5.00503, 5.00504"
+
 =head1 DESCRIPTION
 
 Module::CoreList contains the hash of hashes
@@ -28,6 +31,9 @@ that's what you're testing for.
 
 It also contains %Module::CoreList::released hash, which has ISO
 formatted versions of the release dates, as gleaned from L<perlhist>
+
+New, in 1.96 is also the %Module::CoreList::families hash, which
+clusters known perl releases by their major versions.
 
 =head1 CAVEATS
 
@@ -48,7 +54,7 @@ Richard Clamp E<lt>richardc@unixbeard.netE<gt>
 
 =head1 COPYRIGHT
 
-Copyright (C) 2002 Richard Clamp.  All Rights Reserved.
+Copyright (C) 2002-2004 Richard Clamp.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
@@ -108,6 +114,12 @@ sub first_release {
     5.008004 => '2004-04-21',
     5.008005 => '2004-07-19',
    );
+
+for my $version ( sort { $a <=> $b } keys %released ) {
+    my $family = int ($version * 1000) / 1000;
+    push @{ $families{ $family }} , $version;
+}
+
 
 %version = (
     5.00307 => {
@@ -520,7 +532,7 @@ sub first_release {
     },
     5.00503   => {
         'AnyDBM_File'           => undef,
-        'attrs'                 => 1.0,
+        'attrs'                 => '1.0',
         'AutoLoader'            => undef,
         'AutoSplit'             => 1.0303,
         'autouse'               => 1.01,
@@ -541,7 +553,7 @@ sub first_release {
         'B::Xref'               => undef,
         'base'                  => undef,
         'Benchmark'             => undef,
-        'blib'                  => 1.00,
+        'blib'                  => '1.00',
         'Carp'                  => undef,
         'CGI'                   => 2.46,
         'CGI::Apache'           => 1.1,
@@ -552,10 +564,10 @@ sub first_release {
         'CGI::Switch'           => 0.06,
         'Class::Struct'         => undef,
         'Config'                => undef,
-        'constant'              => 1.00,
+        'constant'              => '1.00',
         'CPAN::FirstTime'       => 1.36 ,
         'CPAN'                  => 1.48,
-        'CPAN::Nox'             => 1.00,
+        'CPAN::Nox'             => '1.00',
         'Cwd'                   => 2.01,
         'Data::Dumper'          => 2.101,
         'DB_File'               => 1.65,
@@ -582,7 +594,7 @@ sub first_release {
         'ExtUtils::MM_Win32'    => undef,
         'ExtUtils::Packlist'    => 0.03,
         'ExtUtils::testlib'     => 1.11 ,
-        'ExtUtils::XSSymSet'    => 1.0,
+        'ExtUtils::XSSymSet'    => '1.0',
         'Fatal'                 => 1.02,
         'Fcntl'                 => 1.03,
         'fields'                => 0.02,
@@ -594,16 +606,16 @@ sub first_release {
         'File::Find'            => undef,
         'File::Path'            => 1.0401,
         'File::Spec'            => 0.6,
-        'File::Spec::Mac'       => 1.0,
+        'File::Spec::Mac'       => '1.0',
         'File::Spec::OS2'       => undef,
         'File::Spec::Unix'      => undef,
         'File::Spec::VMS'       => undef,
         'File::Spec::Win32'     => undef,
         'File::stat'            => undef,
         'FileCache'             => undef,
-        'FileHandle'            => 2.00,
+        'FileHandle'            => '2.00',
         'FindBin'               => 1.42,
-        'GDBM_File'             => 1.00,
+        'GDBM_File'             => '1.00',
         'Getopt::Long'          => 2.19,
         'Getopt::Std'           => 1.01,
         'I18N::Collate'         => undef,
@@ -613,12 +625,12 @@ sub first_release {
         'IO::Handle'            => 1.1505,
         'IO::Pipe'              => 1.0902,
         'IO::Seekable'          => 1.06,
-        'IO::Select'            => 1.10,
+        'IO::Select'            => '1.10',
         'IO::Socket'            => 1.1603,
-        'IPC::Msg'              => 1.00,
+        'IPC::Msg'              => '1.00',
         'IPC::Open2'            => 1.01,
         'IPC::Open3'            => 1.0103,
-        'IPC::Semaphore'        => 1.00,
+        'IPC::Semaphore'        => '1.00',
         'IPC::SysV'             => 1.03,
         'less'                  => undef,
         'lib'                   => undef,
@@ -634,7 +646,7 @@ sub first_release {
         'Net::protoent'         => undef,
         'Net::servent'          => undef,
         'O'                     => undef,
-        'ODBM_File'             => 1.00,
+        'ODBM_File'             => '1.00',
         'Opcode'                => 1.04,
         'ops'                   => undef,
         'OS2::ExtAttr'          => 0.01,
@@ -648,7 +660,7 @@ sub first_release {
         'POSIX'                 => 1.02,
         're'                    => 0.02,
         'Safe'                  => 2.06,
-        'SDBM_File'             => 1.00,
+        'SDBM_File'             => '1.00',
         'Search::Dict'          => undef,
         'SelectSaver'           => undef,
         'SelfLoader'            => 1.08,
@@ -670,12 +682,12 @@ sub first_release {
         'Text::Soundex'         => undef,
         'Text::Tabs'            => 96.121201,
         'Text::Wrap'            => 98.112902,
-        'Thread'                => 1.0,
+        'Thread'                => '1.0',
         'Thread::Queue'         => undef,
         'Thread::Semaphore'     => undef,
         'Thread::Specific'      => undef,
         'Thread::Signal'        => undef,
-        'Tie::Array'            => 1.00,
+        'Tie::Array'            => '1.00',
         'Tie::Handle'           => undef,
         'Tie::Hash'             => undef,
         'Tie::RefHash'          => undef,
@@ -907,6 +919,7 @@ sub first_release {
         'ExtUtils::MM_Win32'    => undef,  #lib/ExtUtils/MM_Win32.pm
         'ExtUtils::Packlist'    => '0.03',  #lib/ExtUtils/Packlist.pm
         'ExtUtils::testlib'     => '1.11 ',  #lib/ExtUtils/testlib.pm
+        'ExtUtils::XSSymSet'    => '1.0',  #vms/ext/XSSymSet.pm
         'Fatal'                 => '1.02',  #lib/Fatal.pm
         'Fcntl'                 => '1.03',  #lib/Fcntl.pm
         'fields'                => '0.02',  #lib/fields.pm
@@ -952,14 +965,20 @@ sub first_release {
         'Math::BigInt'          => undef,  #lib/Math/BigInt.pm
         'Math::Complex'         => '1.26',  #lib/Math/Complex.pm
         'Math::Trig'            => '1',  #lib/Math/Trig.pm
+        'NDBM_File'             => '1.01',  #ext/NDBM_File/NDBM_File.pm
         'Net::hostent'          => undef,  #lib/Net/hostent.pm
         'Net::netent'           => undef,  #lib/Net/netent.pm
         'Net::Ping'             => '2.02',  #lib/Net/Ping.pm
         'Net::protoent'         => undef,  #lib/Net/protoent.pm
         'Net::servent'          => undef,  #lib/Net/servent.pm
+        'ODBM_File'             => '1.00', #ext/ODBM_File/ODBM_File.pm
         'Opcode'                => '1.04',  #lib/Opcode.pm
         'ops'                   => undef,  #lib/ops.pm
         'O'                     => undef,  #lib/O.pm
+        'OS2::ExtAttr'          => '0.01',  #os2/OS2/ExtAttr/ExtAttr.pm
+        'OS2::PrfDB'            => '0.02',  #os2/OS2/PrfDB/PrfDB.pm
+        'OS2::Process'          => '0.2',  #os2/OS2/Process/Process.pm
+        'OS2::REXX'             => undef,  #os2/OS2/REXX/REXX.pm
         'overload'              => undef,  #lib/overload.pm
         'Pod::Functions'        => undef,  #lib/Pod/Functions.pm
         'Pod::Html'             => '1.02',  #lib/Pod/Html.pm
@@ -989,6 +1008,11 @@ sub first_release {
         'Text::Soundex'         => undef,  #lib/Text/Soundex.pm
         'Text::Tabs'            => '96.121201',  #lib/Text/Tabs.pm
         'Text::Wrap'            => '98.112902',  #lib/Text/Wrap.pm
+        'Thread'                => '1.0',  #ext/Thread/Thread.pm
+        'Thread::Queue'         => undef,  #ext/Thread/Thread/Queue.pm
+        'Thread::Semaphore'     => undef,  #ext/Thread/Thread/Semaphore.pm
+        'Thread::Signal'        => undef,  #ext/Thread/Thread/Signal.pm
+        'Thread::Specific'      => undef,  #ext/Thread/Thread/Specific.pm
         'Tie::Array'            => '1.00',  #lib/Tie/Array.pm
         'Tie::Handle'           => undef,  #lib/Tie/Handle.pm
         'Tie::Hash'             => undef,  #lib/Tie/Hash.pm
@@ -1003,6 +1027,10 @@ sub first_release {
         'User::grent'           => undef,  #lib/User/grent.pm
         'User::pwent'           => undef,  #lib/User/pwent.pm
         'vars'                  => undef,  #lib/vars.pm
+        'VMS::DCLsym'           => '1.01',  #vms/ext/DCLsym/DCLsym.pm
+        'VMS::Filespec'         => undef,  #vms/ext/Filespec.pm
+        'VMS::Stdio'            => '2.1',  #vms/ext/Stdio/Stdio.pm
+        'vmsish'                => undef,  #vms/ext/vmsish.pm
         },
 
     5.006   => {
@@ -1225,7 +1253,7 @@ sub first_release {
     5.006001   => {
         'AnyDBM_File'           => undef,
         'attributes'            => 0.03,
-        'attrs'                 => 1.0,
+        'attrs'                 => '1.0',
         'AutoLoader'            => 5.58,
         'AutoSplit'             => 1.0305,
         'autouse'               => 1.02,
@@ -1248,14 +1276,14 @@ sub first_release {
         'B::Xref'               => undef,
         'base'                  => 1.01,
         'Benchmark'             => 1,
-        'blib'                  => 1.00,
+        'blib'                  => '1.00',
         'ByteLoader'            => 0.04,
         'bytes'                 => undef,
         'Carp'                  => undef,
         'Carp::Heavy'           => undef,
         'CGI'                   => 2.752,
         'CGI::Apache'           => undef,
-        'CGI::Carp'             => 1.20,
+        'CGI::Carp'             => '1.20',
         'CGI::Cookie'           => 1.18,
         'CGI::Fast'             => 1.02,
         'CGI::Pretty'           => 1.05,
@@ -1267,14 +1295,14 @@ sub first_release {
         'Config'                => undef,
         'constant'              => 1.02,
         'CPAN::FirstTime'       => 1.53 ,
-        'CPAN'                  => 1.59_54,
-        'CPAN::Nox'             => 1.00,
+        'CPAN'                  => '1.59_54',
+        'CPAN::Nox'             => '1.00',
         'Cwd'                   => 2.04,
         'Data::Dumper'          => 2.102,
-        'DB'                    => 1.0,
+        'DB'                    => '1.0',
         'DB_File'               => 1.75,
         'Devel::DProf'          => '20000000.00_00',
-        'Devel::Peek'           => 1.00_01,
+        'Devel::Peek'           => '1.00_01',
         'Devel::SelfStubber'    => 1.01,
         'diagnostics'           => '1.0', # really v1.0, but that causes breakage
         'DirHandle'             => undef,
@@ -1300,7 +1328,7 @@ sub first_release {
         'ExtUtils::MM_Win32'    => undef,
         'ExtUtils::Packlist'    => 0.03,
         'ExtUtils::testlib'     => 1.11 ,
-        'ExtUtils::XSSymSet'    => 1.0,
+        'ExtUtils::XSSymSet'    => '1.0',
         'Fatal'                 => 1.02,
         'Fcntl'                 => 1.03,
         'fields'                => 1.01,
@@ -1323,7 +1351,7 @@ sub first_release {
         'File::stat'            => undef,
         'File::Temp'            => 0.12,
         'FileCache'             => undef,
-        'FileHandle'            => 2.00,
+        'FileHandle'            => '2.00',
         'filetest'              => undef,
         'FindBin'               => 1.42,
         'GDBM_File'             => 1.05,
@@ -1331,7 +1359,7 @@ sub first_release {
         'Getopt::Std'           => 1.02,
         'I18N::Collate'         => undef,
         'integer'               => undef,
-        'IO'                    => 1.20,
+        'IO'                    => '1.20',
         'IO::Dir'               => 1.03,
         'IO::File'              => 1.08,
         'IO::Handle'            => 1.21,
@@ -1341,11 +1369,11 @@ sub first_release {
         'IO::Select'            => 1.14,
         'IO::Socket'            => 1.26,
         'IO::Socket::INET'      => 1.25,
-        'IO::Socket::UNIX'      => 1.20,
-        'IPC::Msg'              => 1.00,
+        'IO::Socket::UNIX'      => '1.20',
+        'IPC::Msg'              => '1.00',
         'IPC::Open2'            => 1.01,
         'IPC::Open3'            => 1.0103,
-        'IPC::Semaphore'        => 1.00,
+        'IPC::Semaphore'        => '1.00',
         'IPC::SysV'             => 1.03,
         'JNI'                   => 0.1,
         'JPL::AutoLoader'       => undef,
@@ -1373,7 +1401,7 @@ sub first_release {
         'OS2::ExtAttr'          => 0.01,
         'OS2::PrfDB'            => 0.02,
         'OS2::Process'          => 0.2,
-        'OS2::REXX'             => 1.00,
+        'OS2::REXX'             => '1.00',
         'overload'              => undef,
         'Pod::Checker'          => 1.2,
         'Pod::Find'             => 0.21,
@@ -1414,16 +1442,16 @@ sub first_release {
         'Test::Harness'         => 1.1604,
         'Text::Abbrev'          => undef,
         'Text::ParseWords'      => 3.2,
-        'Text::Soundex'         => 1.0,
+        'Text::Soundex'         => '1.0',
         'Text::Tabs'            => 98.112801,
         'Text::Wrap'            => 2001.0131,
-        'Thread'                => 1.0,
+        'Thread'                => '1.0',
         'Thread::Queue'         => undef,
         'Thread::Semaphore'     => undef,
         'Thread::Signal'        => undef,
         'Thread::Specific'      => undef,
         'Tie::Array'            => 1.01,
-        'Tie::Handle'           => 4.0,
+        'Tie::Handle'           => '4.0',
         'Tie::Hash'             => undef,
         'Tie::RefHash'          => 1.3,
         'Tie::Scalar'           => undef,
@@ -1538,6 +1566,7 @@ sub first_release {
         'ExtUtils::MY'          => '0.01', #lib/ExtUtils/MY.pm
         'ExtUtils::Packlist'    => '0.04', #lib/ExtUtils/Packlist.pm
         'ExtUtils::testlib'     => '1.15', #lib/ExtUtils/testlib.pm
+        'ExtUtils::XSSymSet'    => '1.0',  #vms/ext/XSSymSet.pm
         'Fatal'                 => '1.02', #lib/Fatal.pm
         'Fcntl'                 => '1.03', #lib/Fcntl.pm
         'fields'                => '1.01', #lib/fields.pm
@@ -1564,6 +1593,7 @@ sub first_release {
         'FileHandle'            => '2.00', #lib/FileHandle.pm
         'filetest'              => undef, #lib/filetest.pm
         'FindBin'               => '1.42', #lib/FindBin.pm
+        'GDBM_File'             => '1.05', #ext/GDBM_File/GDBM_File.pm
         'Getopt::Long'          => '2.25', #lib/Getopt/Long.pm
         'Getopt::Std'           => '1.02', #lib/Getopt/Std.pm
         'I18N::Collate'         => undef, #lib/I18N/Collate.pm
@@ -1585,6 +1615,10 @@ sub first_release {
         'IPC::Open3'            => '1.0103', #lib/IPC/Open3.pm
         'IPC::Semaphore'        => '1.00', #lib/IPC/Semaphore.pm
         'IPC::SysV'             => '1.03', #lib/IPC/SysV.pm
+        'JNI'                   => '0.1', #jpl/JNI/JNI.pm
+        'JPL::AutoLoader'       => undef, #jpl/JPL/AutoLoader.pm
+        'JPL::Class'            => undef, #jpl/JPL/Class.pm
+        'JPL::Compile'          => undef, #jpl/JPL/Compile.pm
         'less'                  => undef, #lib/less.pm
         'lib'                   => '0.5564', #lib/lib.pm
         'locale'                => undef, #lib/locale.pm
@@ -1592,15 +1626,22 @@ sub first_release {
         'Math::BigInt'          => '0.01', #lib/Math/BigInt.pm
         'Math::Complex'         => '1.31', #lib/Math/Complex.pm
         'Math::Trig'            => '1', #lib/Math/Trig.pm
+        'NDBM_File'             => '1.04',  #ext/NDBM_File/NDBM_File.pm
         'Net::hostent'          => undef, #lib/Net/hostent.pm
         'Net::netent'           => undef, #lib/Net/netent.pm
         'Net::Ping'             => '2.02', #lib/Net/Ping.pm
         'Net::protoent'         => undef, #lib/Net/protoent.pm
         'Net::servent'          => undef, #lib/Net/servent.pm
         'O'                     => undef, #lib/O.pm
+        'ODBM_File'             => '1.03', #ext/ODBM_File/ODBM_File.pm
         'Opcode'                => '1.04', #lib/Opcode.pm
         'open'                  => undef, #lib/open.pm
         'ops'                   => '1.00', #lib/ops.pm
+        'OS2::DLL'              => undef, #os2/OS2/REXX/DLL/DLL.pm
+        'OS2::ExtAttr'          => '0.01', #os2/OS2/ExtAttr/ExtAttr.pm
+        'OS2::PrfDB'            => '0.02', #os2/OS2/PrfDB/PrfDB.pm
+        'OS2::Process'          => '0.2', #os2/OS2/Process/Process.pm
+        'OS2::REXX'             => '1.00', #os2/OS2/REXX/REXX.pm
         'overload'              => undef, #lib/overload.pm
         'Pod::Checker'          => '1.2', #lib/Pod/Checker.pm
         'Pod::Find'             => '0.21', #lib/Pod/Find.pm
@@ -1650,6 +1691,11 @@ sub first_release {
         'Text::Soundex'         => '1.0', #lib/Text/Soundex.pm
         'Text::Tabs'            => '98.112801', #lib/Text/Tabs.pm
         'Text::Wrap'            => '2001.0131', #lib/Text/Wrap.pm
+        'Thread'                => '1.0', #ext/Thread/Thread.pm
+        'Thread::Queue'         => undef, #ext/Thread/Thread/Queue.pm
+        'Thread::Semaphore'     => undef, #ext/Thread/Thread/Semaphore.pm
+        'Thread::Signal'        => undef, #ext/Thread/Thread/Signal.pm
+        'Thread::Specific'      => undef, #ext/Thread/Thread/Specific.pm
         'Tie::Array'            => '1.01', #lib/Tie/Array.pm
         'Tie::Handle'           => '4.0', #lib/Tie/Handle.pm
         'Tie::Hash'             => undef, #lib/Tie/Hash.pm
@@ -1665,6 +1711,10 @@ sub first_release {
         'User::pwent'           => undef, #lib/User/pwent.pm
         'utf8'                  => undef, #lib/utf8.pm
         'vars'                  => undef, #lib/vars.pm
+        'VMS::DCLsym'           => '1.01', #vms/ext/DCLsym/DCLsym.pm
+        'VMS::Filespec'         => undef, #vms/ext/Filespec.pm
+        'VMS::Stdio'            => '2.2', #vms/ext/Stdio/Stdio.pm
+        'vmsish'                => undef, #vms/ext/vmsish.pm
         'warnings'              => undef, #lib/warnings.pm
         'warnings::register'    => undef, #lib/warnings/register.pm
         'XSLoader'              => '0.01', #lib/XSLoader.pm
@@ -1808,7 +1858,6 @@ sub first_release {
         'Filter::Simple'        => '0.77',
         'Filter::Util::Call'    => '1.06',
         'FindBin'               => '1.43',
-        'FindExt'               => '1.00',
         'GDBM_File'             => '1.06',
         'Getopt::Long'          => '2.28',
         'Getopt::Std'           => '1.03',
@@ -2058,7 +2107,7 @@ sub first_release {
         'DynaLoader'            => '1.04',
         'Encode'                => '1.75', #./ext/Encode/Encode.pm
         'Encode::Alias'         => '1.32', #./ext/Encode/lib/Encode/Alias.pm
-        'Encode::Byte::Byte'    => '1.22', #./ext/Encode/Byte/Byte.pm
+        'Encode::Byte'          => '1.22', #./ext/Encode/Byte/Byte.pm
         'Encode::CJKConstants'  => '1.00', #./ext/Encode/lib/Encode/CJKConstants.pm
         'Encode::CN'            => '1.24', #./ext/Encode/CN/CN.pm
         'Encode::CN::HZ'        => '1.04', #./ext/Encode/lib/Encode/CN/HZ.pm
@@ -2069,7 +2118,7 @@ sub first_release {
         'Encode::Guess'         => '1.06', #./ext/Encode/lib/Encode/Guess.pm
         'Encode::JP::H2Z'       => '1.02', #./ext/Encode/lib/Encode/JP/H2Z.pm
         'Encode::JP::JIS7'      => '1.08', #./ext/Encode/lib/Encode/JP/JIS7.pm
-        'Encode::JP::JP'        => '1.25', #./ext/Encode/JP/JP.pm
+        'Encode::JP'            => '1.25', #./ext/Encode/JP/JP.pm
         'Encode::KR'            => '1.22', #./ext/Encode/KR/KR.pm
         'Encode::KR::2022_KR'   => '1.05', #./ext/Encode/lib/Encode/KR/2022_KR.pm
         'Encode::MIME::Header'  => '1.05', #./ext/Encode/lib/Encode/MIME/Header.pm
@@ -2138,7 +2187,6 @@ sub first_release {
         'Filter::Simple'        => '0.78', #./lib/Filter/Simple.pm
         'Filter::Util::Call'    => '1.06', #./ext/Filter/Util/Call/Call.pm
         'FindBin'               => '1.43', #./lib/FindBin.pm
-        'FindExt'               => '1.00', #./win32/FindExt.pm
         'GDBM_File'             => '1.06', #./ext/GDBM_File/GDBM_File.pm
         'Getopt::Long'          => '2.32', #./lib/Getopt/Long.pm
         'Getopt::Std'           => '1.03', #./lib/Getopt/Std.pm
@@ -2300,7 +2348,7 @@ sub first_release {
         'Tie::Handle'           => '4.1', #./lib/Tie/Handle.pm
         'Tie::Hash'             => '1.00', #./lib/Tie/Hash.pm
         'Tie::Memoize'          => '1.0', #./lib/Tie/Memoize.pm
-        'Tie::RefHash'          => '1.3', #./lib/Tie/RefHash.pm
+        'Tie::RefHash'          => '1.30', #./lib/Tie/RefHash.pm
         'Tie::Scalar'           => '1.00', #./lib/Tie/Scalar.pm
         'Tie::SubstrHash'       => '1.00', #./lib/Tie/SubstrHash.pm
         'Time::gmtime'          => '1.02', #./lib/Time/gmtime.pm
@@ -2451,6 +2499,7 @@ sub first_release {
         'ExtUtils::MY'          => '0.01', #./lib/ExtUtils/MY.pm
         'ExtUtils::Packlist'    => '0.04', #./lib/ExtUtils/Packlist.pm
         'ExtUtils::testlib'     => '1.15', #./lib/ExtUtils/testlib.pm
+        'ExtUtils::XSSymSet'    => '1.0',  #./vms/ext/XSSymSet.pm
         'Fatal'                 => '1.03', #./lib/Fatal.pm
         'Fcntl'                 => '1.05', #./lib/Fcntl.pm
         'fields'                => '2.03', #./lib/fields.pm
@@ -2479,7 +2528,7 @@ sub first_release {
         'Filter::Simple'        => '0.78', #./lib/Filter/Simple.pm
         'Filter::Util::Call'    => '1.0601', #./lib/Filter/Util/Call.pm
         'FindBin'               => '1.43', #./lib/FindBin.pm
-        'FindExt'               => '1.00', #./win32/FindExt.pm
+        'GDBM_File'             => '1.07', #./ext/GDBM_File/GDBM_File.pm
         'Getopt::Long'          => '2.34', #./lib/Getopt/Long.pm
         'Getopt::Std'           => '1.04', #./lib/Getopt/Std.pm
         'Hash::Util'            => '0.05', #./lib/Hash/Util.pm
@@ -2505,7 +2554,7 @@ sub first_release {
         'IPC::Open3'            => '1.0105', #./lib/IPC/Open3.pm
         'IPC::Semaphore'        => '1.02', #./lib/IPC/Semaphore.pm
         'IPC::SysV'             => '1.04', #./lib/IPC/SysV.pm
-        'JNI::JNI'              => '0.2', #./jpl/JNI/JNI.pm
+        'JNI'                   => '0.2', #./jpl/JNI/JNI.pm
         'JPL::AutoLoader'       => undef, #./jpl/JPL/AutoLoader.pm
         'JPL::Class'            => undef, #./jpl/JPL/Class.pm
         'JPL::Compile'          => undef, #./jpl/JPL/Compile.pm
@@ -2540,6 +2589,7 @@ sub first_release {
         'Memoize::Storable'     => '0.65', #./lib/Memoize/Storable.pm
         'MIME::Base64'          => '2.20', #./lib/MIME/Base64.pm
         'MIME::QuotedPrint'     => '2.20', #./lib/MIME/QuotedPrint.pm
+        'NDBM_File'             => '1.05', #./ext/NDBM_File/NDBM_File.pm
         'Net::Cmd'              => '2.24', #./lib/Net/Cmd.pm
         'Net::Config'           => '1.10', #./lib/Net/Config.pm
         'Net::Domain'           => '2.18', #./lib/Net/Domain.pm
@@ -2561,14 +2611,15 @@ sub first_release {
         'Net::Time'             => '2.09', #./lib/Net/Time.pm
         'NEXT'                  => '0.60', #./lib/NEXT.pm
         'O'                     => '1.00', #./lib/O.pm
+        'ODBM_File'             => '1.04', #./ext/ODBM_File/ODBM_File.pm
         'Opcode'                => '1.05', #./lib/Opcode.pm
         'open'                  => '1.02', #./lib/open.pm
         'ops'                   => '1.00', #./lib/ops.pm
-        'OS2::ExtAttr::ExtAttr' => '0.02', #./os2/OS2/ExtAttr/ExtAttr.pm
-        'OS2::PrfDB::PrfDB'     => '0.03', #./os2/OS2/PrfDB/PrfDB.pm
-        'OS2::Process::Process' => '1.01', #./os2/OS2/Process/Process.pm
-        'OS2::REXX::DLL::DLL'   => '1.01', #./os2/OS2/REXX/DLL/DLL.pm
-        'OS2::REXX::REXX'       => '1.02', #./os2/OS2/REXX/REXX.pm
+        'OS2::ExtAttr'          => '0.02', #./os2/OS2/ExtAttr/ExtAttr.pm
+        'OS2::PrfDB'            => '0.03', #./os2/OS2/PrfDB/PrfDB.pm
+        'OS2::Process'          => '1.01', #./os2/OS2/Process/Process.pm
+        'OS2::DLL'              => '1.01', #./os2/OS2/REXX/DLL/DLL.pm
+        'OS2::REXX'             => '1.02', #./os2/OS2/REXX/REXX.pm
         'overload'              => '1.01', #./lib/overload.pm
         'PerlIO'                => '1.02', #./lib/PerlIO.pm
         'PerlIO::encoding'      => '0.07', #./lib/PerlIO/encoding.pm
@@ -2644,6 +2695,8 @@ sub first_release {
         'Thread'                => '2.00', #./lib/Thread.pm
         'Thread::Queue'         => '2.00', #./lib/Thread/Queue.pm
         'Thread::Semaphore'     => '2.01', #./lib/Thread/Semaphore.pm
+        'Thread::Signal'        => '1.00', #./ext/Thread/Thread/Signal.pm
+        'Thread::Specific'      => '1.00', #./ext/Thread/Thread/Specific.pm
         'threads'               => '1.00', #./lib/threads.pm
         'threads::shared'       => '0.91', #./lib/threads/shared.pm
         'Tie::Array'            => '1.03', #./lib/Tie/Array.pm
@@ -2667,6 +2720,9 @@ sub first_release {
         'User::pwent'           => '1.00', #./lib/User/pwent.pm
         'utf8'                  => '1.02', #./lib/utf8.pm
         'vars'                  => '1.01', #./lib/vars.pm
+        'VMS::DCLsym'           => '1.02', #./vms/ext/DCLsym/DCLsym.pm
+        'VMS::Filespec'         => '1.11', #./vms/ext/Filespec.pm
+        'VMS::Stdio'            => '2.3', #./vms/ext/Stdio/Stdio.pm
         'vmsish'                => '1.01', #./lib/vmsish.pm
         'warnings'              => '1.03', #./lib/warnings.pm
         'warnings::register'    => '1.00', #./lib/warnings/register.pm
@@ -2676,11 +2732,11 @@ sub first_release {
     },
 
     5.008002 => {
-        'AnyDBM_File' => 1.00,  #AnyDBM_File.pm
+        'AnyDBM_File' => '1.00',  #AnyDBM_File.pm
         'Attribute::Handlers' => 0.78, #Attribute\Handlers.pm
         'attributes' => 0.06,   #attributes.pm
         'attrs' => 1.01,        #attrs.pm
-        'AutoLoader' => 5.60,   #AutoLoader.pm
+        'AutoLoader' => '5.60',   #AutoLoader.pm
         'AutoSplit' => 1.04,    #AutoSplit.pm
         'autouse' => 1.03,      #autouse.pm
         'B' => 1.02,            #B.pm
@@ -2689,15 +2745,15 @@ sub first_release {
         'B::Bblock' => 1.02,    #B\Bblock.pm
         'B::Bytecode' => 1.01,  #B\Bytecode.pm
         'B::C' => 1.02,         #B\C.pm
-        'B::CC' => 1.00,        #B\CC.pm
+        'B::CC' => '1.00',        #B\CC.pm
         'B::Concise' => 0.56,   #B\Concise.pm
         'B::Debug' => 1.01,     #B\Debug.pm
         'B::Deparse' => 0.64,   #B\Deparse.pm
         'B::Disassembler' => 1.03, #B\Disassembler.pm
         'B::Lint' => 1.02,      #B\Lint.pm
-        'B::Showlex' => 1.00,   #B\Showlex.pm
-        'B::Stackobj' => 1.00,  #B\Stackobj.pm
-        'B::Stash' => 1.00,     #B\Stash.pm
+        'B::Showlex' => '1.00',   #B\Showlex.pm
+        'B::Stackobj' => '1.00',  #B\Stackobj.pm
+        'B::Stash' => '1.00',     #B\Stash.pm
         'B::Terse' => 1.02,     #B\Terse.pm
         'B::Xref' => 1.01,      #B\Xref.pm
         'base' => 2.03,         #base.pm
@@ -2710,34 +2766,34 @@ sub first_release {
         'bytes' => 1.01,        #bytes.pm
         'Carp' => 1.01,         #Carp.pm
         'Carp::Heavy' => 1.01,  #Carp\Heavy.pm
-        'CGI' => 3.00,          #CGI.pm
-        'CGI::Apache' => 1.00,  #CGI\Apache.pm
+        'CGI' => '3.00',          #CGI.pm
+        'CGI::Apache' => '1.00',  #CGI\Apache.pm
         'CGI::Carp' => 1.26,    #CGI\Carp.pm
         'CGI::Cookie' => 1.24,  #CGI\Cookie.pm
         'CGI::Fast' => 1.041,   #CGI\Fast.pm
-        'CGI::Pretty' => 1.07_00, #CGI\Pretty.pm
+        'CGI::Pretty' => '1.07_00', #CGI\Pretty.pm
         'CGI::Push' => 1.04,    #CGI\Push.pm
-        'CGI::Switch' => 1.00,  #CGI\Switch.pm
+        'CGI::Switch' => '1.00',  #CGI\Switch.pm
         'CGI::Util' => 1.31,    #CGI\Util.pm
         'charnames' => 1.02,    #charnames.pm
         'Class::ISA' => 0.32,   #Class\ISA.pm
         'Class::Struct' => 0.63, #Class\Struct.pm
         'Config' => undef,      #Config.pm
         'constant' => 1.04,     #constant.pm
-        'CPAN' => 1.76_01,      #CPAN.pm
-        'CPAN::FirstTime' => 1.60 , #CPAN\FirstTime.pm
+        'CPAN' => '1.76_01',      #CPAN.pm
+        'CPAN::FirstTime' => '1.60 ', #CPAN\FirstTime.pm
         'CPAN::Nox' => 1.03,    #CPAN\Nox.pm
         'Cwd' => 2.08,          #Cwd.pm
         'Data::Dumper' => 2.121, #Data\Dumper.pm
-        'DB' => 1.0,            #DB.pm
-        'Devel::DProf' => 20030813.00, #Devel\DProf.pm
+        'DB' => '1.0',            #DB.pm
+        'Devel::DProf' => '20030813.00', #Devel\DProf.pm
         'Devel::Peek' => 1.01,  #Devel\Peek.pm
         'Devel::PPPort' => 2.009, #Devel\PPPort.pm
         'Devel::SelfStubber' => 1.03, #Devel\SelfStubber.pm
         'diagnostics' => 1.11,  #diagnostics.pm
         'Digest' => 1.02,       #Digest.pm
-        'Digest::MD5' => 2.30,  #Digest\MD5.pm
-        'DirHandle' => 1.00,    #DirHandle.pm
+        'Digest::MD5' => '2.30',  #Digest\MD5.pm
+        'DirHandle' => '1.00',    #DirHandle.pm
         'Dumpvalue' => 1.11,    #Dumpvalue.pm
         'DynaLoader' => 1.04,   #DynaLoader.pm
         'Encode' => 1.9801,     #Encode.pm
@@ -2759,12 +2815,12 @@ sub first_release {
         'Encode::MIME::Header' => 1.09, #Encode\MIME\Header.pm
         'Encode::Symbol' => 1.22, #Encode\Symbol.pm
         'Encode::TW' => 1.26,   #Encode\TW.pm
-        'Encode::Unicode' => 1.40, #Encode\Unicode.pm
+        'Encode::Unicode' => '1.40', #Encode\Unicode.pm
         'Encode::Unicode::UTF7' => 0.02, #Encode\Unicode\UTF7.pm
         'encoding' => 1.47,     #encoding.pm
         'English' => 1.01,      #English.pm
-        'Env' => 1.00,          #Env.pm
-        'Errno' => 1.09_00,     #Errno.pm
+        'Env' => '1.00',          #Env.pm
+        'Errno' => '1.09_00',     #Errno.pm
         'Exporter' => 5.567,    #Exporter.pm
         'Exporter::Heavy' => 5.567, #Exporter\Heavy.pm
         'ExtUtils::Command' => 1.05, #ExtUtils\Command.pm
@@ -2792,12 +2848,13 @@ sub first_release {
         'ExtUtils::MM_OS2' => 1.04, #ExtUtils\MM_OS2.pm
         'ExtUtils::MM_Unix' => 1.42, #ExtUtils\MM_Unix.pm
         'ExtUtils::MM_UWIN' => 0.02, #ExtUtils\MM_UWIN.pm
-        'ExtUtils::MM_VMS' => 5.70, #ExtUtils\MM_VMS.pm
+        'ExtUtils::MM_VMS' => '5.70', #ExtUtils\MM_VMS.pm
         'ExtUtils::MM_Win32' => 1.09, #ExtUtils\MM_Win32.pm
         'ExtUtils::MM_Win95' => 0.03, #ExtUtils\MM_Win95.pm
         'ExtUtils::MY' => 0.01, #ExtUtils\MY.pm
         'ExtUtils::Packlist' => 0.04, #ExtUtils\Packlist.pm
         'ExtUtils::testlib' => 1.15, #ExtUtils\testlib.pm
+        'ExtUtils::XSSymSet' => '1.0',  #vms\ext\XSSymSet.pm
         'Fatal' => 1.03,        #Fatal.pm
         'Fcntl' => 1.05,        #Fcntl.pm
         'fields' => 2.03,       #fields.pm
@@ -2805,7 +2862,7 @@ sub first_release {
         'File::CheckTree' => 4.2, #File\CheckTree.pm
         'File::Compare' => 1.1003, #File\Compare.pm
         'File::Copy' => 2.06,   #File\Copy.pm
-        'File::DosGlob' => 1.00, #File\DosGlob.pm
+        'File::DosGlob' => '1.00', #File\DosGlob.pm
         'File::Find' => 1.05,   #File\Find.pm
         'File::Glob' => 1.02,   #File\Glob.pm
         'File::Path' => 1.06,   #File\Path.pm
@@ -2818,7 +2875,7 @@ sub first_release {
         'File::Spec::Unix' => 1.5, #File\Spec\Unix.pm
         'File::Spec::VMS' => 1.4, #File\Spec\VMS.pm
         'File::Spec::Win32' => 1.4, #File\Spec\Win32.pm
-        'File::stat' => 1.00,   #File\stat.pm
+        'File::stat' => '1.00',   #File\stat.pm
         'File::Temp' => 0.14,   #File\Temp.pm
         'FileCache' => 1.03,    #FileCache.pm
         'FileHandle' => 2.01,   #FileHandle.pm
@@ -2826,19 +2883,19 @@ sub first_release {
         'Filter::Simple' => 0.78, #Filter\Simple.pm
         'Filter::Util::Call' => 1.0601, #Filter\Util\Call.pm
         'FindBin' => 1.43,      #FindBin.pm
-        'FindExt' => '1.00',    #FindExt.pm
+        'GDBM_File' => '1.07', #ext\GDBM_File\GDBM_File.pm
         'Getopt::Long' => 2.34, #Getopt\Long.pm
         'Getopt::Std' => 1.04,  #Getopt\Std.pm
         'Hash::Util' => 0.05,   #Hash\Util.pm
-        'I18N::Collate' => 1.00, #I18N\Collate.pm
+        'I18N::Collate' => '1.00', #I18N\Collate.pm
         'I18N::Langinfo' => '0.02', #I18N\Langinfo.pm
         'I18N::LangTags' => 0.29, #I18N\LangTags.pm
         'I18N::LangTags::List' => 0.29, #I18N\LangTags\List.pm
         'if' => 0.03,           #if.pm
-        'integer' => 1.00,      #integer.pm
+        'integer' => '1.00',      #integer.pm
         'IO' => 1.21,           #IO.pm
         'IO::Dir' => 1.04,      #IO\Dir.pm
-        'IO::File' => 1.10,     #IO\File.pm
+        'IO::File' => '1.10',     #IO\File.pm
         'IO::Handle' => 1.23,   #IO\Handle.pm
         'IO::Pipe' => 1.122,    #IO\Pipe.pm
         'IO::Poll' => 0.06,     #IO\Poll.pm
@@ -2847,12 +2904,19 @@ sub first_release {
         'IO::Socket' => 1.28,   #IO\Socket.pm
         'IO::Socket::INET' => 1.27, #IO\Socket\INET.pm
         'IO::Socket::UNIX' => 1.21, #IO\Socket\UNIX.pm
+        'IPC::Msg' => 1.02,     #IPC\Msg.pm
         'IPC::Open2' => 1.01,   #IPC\Open2.pm
         'IPC::Open3' => 1.0105, #IPC\Open3.pm
+        'IPC::Semaphore' => 1.02, #IPC\Semaphore.pm
+        'IPC::SysV' => 1.04,    #IPC\SysV.pm
+        'JNI' => '0.2',         #jpl\JNI\JNI.pm
+        'JPL::AutoLoader' => undef, #jpl\JPL\AutoLoader.pm
+        'JPL::Class' => undef,  #jpl\JPL\Class.pm
+        'JPL::Compile' => undef, #jpl\JPL\Compile.pm
         'less' => 0.01,         #less.pm
         'lib' => 0.5565,        #lib.pm
         'List::Util' => 1.13,   #List\Util.pm
-        'locale' => 1.00,       #locale.pm
+        'locale' => '1.00',       #locale.pm
         'Locale::Constants' => 2.01, #Locale\Constants.pm
         'Locale::Country' => 2.61, #Locale\Country.pm
         'Locale::Currency' => 2.21, #Locale\Currency.pm
@@ -2861,18 +2925,18 @@ sub first_release {
         'Locale::Maketext::Guts' => undef, #Locale\Maketext\Guts.pm
         'Locale::Maketext::GutsLoader' => undef, #Locale\Maketext\GutsLoader.pm
         'Locale::Script' => 2.21, #Locale\Script.pm
-        'Math::BigFloat' => 1.40, #Math\BigFloat.pm
+        'Math::BigFloat' => '1.40', #Math\BigFloat.pm
         'Math::BigFloat::Trace' => 0.01, #Math\BigFloat\Trace.pm
         'Math::BigInt' => 1.66, #Math\BigInt.pm
         'Math::BigInt::Calc' => 0.36, #Math\BigInt\Calc.pm
         'Math::BigInt::Scalar' => 0.11, #Math\BigInt\Scalar.pm
         'Math::BigInt::Trace' => 0.01, #Math\BigInt\Trace.pm
-        'Math::BigRat' => 0.10, #Math\BigRat.pm
+        'Math::BigRat' => '0.10', #Math\BigRat.pm
         'Math::Complex' => 1.34, #Math\Complex.pm
         'Math::Trig' => 1.02,   #Math\Trig.pm
         'Memoize' => 1.01,      #Memoize.pm
         'Memoize::AnyDBM_File' => 0.65, #Memoize\AnyDBM_File.pm
-        'Memoize::Expire' => 1.00, #Memoize\Expire.pm
+        'Memoize::Expire' => '1.00', #Memoize\Expire.pm
         'Memoize::ExpireFile' => 1.01, #Memoize\ExpireFile.pm
         'Memoize::ExpireTest' => 0.65, #Memoize\ExpireTest.pm
         'Memoize::NDBM_File' => 0.65, #Memoize\NDBM_File.pm
@@ -2880,8 +2944,9 @@ sub first_release {
         'Memoize::Storable' => 0.65, #Memoize\Storable.pm
         'MIME::Base64' => 2.21, #MIME\Base64.pm
         'MIME::QuotedPrint' => 2.21, #MIME\QuotedPrint.pm
+        'NDBM_File' => '1.05',  #ext\NDBM_File\NDBM_File.pm
         'Net::Cmd' => 2.24,     #Net\Cmd.pm
-        'Net::Config' => 1.10,  #Net\Config.pm
+        'Net::Config' => '1.10',  #Net\Config.pm
         'Net::Domain' => 2.19,  #Net\Domain.pm
         'Net::FTP' => 2.72,     #Net\FTP.pm
         'Net::FTP::A' => 1.16,  #Net\FTP\A.pm
@@ -2890,20 +2955,26 @@ sub first_release {
         'Net::FTP::I' => 1.12,  #Net\FTP\I.pm
         'Net::FTP::L' => 0.01,  #Net\FTP\L.pm
         'Net::hostent' => 1.01, #Net\hostent.pm
-        'Net::netent' => 1.00,  #Net\netent.pm
+        'Net::netent' => '1.00',  #Net\netent.pm
         'Net::Netrc' => 2.12,   #Net\Netrc.pm
         'Net::NNTP' => 2.22,    #Net\NNTP.pm
         'Net::Ping' => 2.31,    #Net\Ping.pm
         'Net::POP3' => 2.24,    #Net\POP3.pm
-        'Net::protoent' => 1.00, #Net\protoent.pm
+        'Net::protoent' => '1.00', #Net\protoent.pm
         'Net::servent' => 1.01, #Net\servent.pm
         'Net::SMTP' => 2.26,    #Net\SMTP.pm
         'Net::Time' => 2.09,    #Net\Time.pm
-        'NEXT' => 0.60,         #NEXT.pm
-        'O' => 1.00,            #O.pm
+        'NEXT' => '0.60',         #NEXT.pm
+        'O' => '1.00',            #O.pm
+        'ODBM_File' => '1.04',  #ext\ODBM_File\ODBM_File.pm
         'Opcode' => 1.05,       #Opcode.pm
         'open' => 1.02,         #open.pm
-        'ops' => 1.00,          #ops.pm
+        'ops' => '1.00',          #ops.pm
+        'OS2::DLL' => '1.01',   #os2\OS2\REXX\DLL\DLL.pm
+        'OS2::ExtAttr' => '0.02', #os2\OS2\ExtAttr\ExtAttr.pm
+        'OS2::PrfDB' => '0.03', #os2\OS2\PrfDB\PrfDB.pm
+        'OS2::Process' => '1.01', #os2\OS2\Process\Process.pm
+        'OS2::REXX' => '1.02',  #os2\OS2\REXX\REXX.pm
         'overload' => 1.01,     #overload.pm
         'PerlIO' => 1.02,       #PerlIO.pm
         'PerlIO::encoding' => 0.07, #PerlIO\encoding.pm
@@ -2941,11 +3012,11 @@ sub first_release {
         'Pod::Usage' => 1.16,   #Pod\Usage.pm
         'POSIX' => 1.06,        #POSIX.pm
         're' => 0.04,           #re.pm
-        'Safe' => 2.10,         #Safe.pm
+        'Safe' => '2.10',         #Safe.pm
         'Scalar::Util' => 1.13, #Scalar\Util.pm
         'SDBM_File' => 1.04,    #SDBM_File.pm
         'Search::Dict' => 1.02, #Search\Dict.pm
-        'SelectSaver' => 1.00,  #SelectSaver.pm
+        'SelectSaver' => '1.00',  #SelectSaver.pm
         'SelfLoader' => 1.0904, #SelfLoader.pm
         'Shell' => 0.5,         #Shell.pm
         'sigtrap' => 1.02,      #sigtrap.pm
@@ -2953,17 +3024,18 @@ sub first_release {
         'sort' => 1.02,         #sort.pm
         'Storable' => 2.08,     #Storable.pm
         'strict' => 1.03,       #strict.pm
-        'subs' => 1.00,         #subs.pm
-        'Switch' => 2.10,       #Switch.pm
+        'subs' => '1.00',         #subs.pm
+        'Switch' => '2.10',       #Switch.pm
         'Symbol' => 1.05,       #Symbol.pm
         'Sys::Hostname' => 1.11, #Sys\Hostname.pm
+        'Sys::Syslog' => '0.04', #ext\Sys\Syslog\Syslog.pm
         'Term::ANSIColor' => 1.07, #Term\ANSIColor.pm
         'Term::Cap' => 1.08,    #Term\Cap.pm
         'Term::Complete' => 1.401, #Term\Complete.pm
         'Term::ReadLine' => 1.01, #Term\ReadLine.pm
         'Test' => 1.24,         #Test.pm
         'Test::Builder' => 0.17, #Test\Builder.pm
-        'Test::Harness' => 2.30, #Test\Harness.pm
+        'Test::Harness' => '2.30', #Test\Harness.pm
         'Test::Harness::Assert' => 0.01, #Test\Harness\Assert.pm
         'Test::Harness::Iterator' => 0.01, #Test\Harness\Iterator.pm
         'Test::Harness::Straps' => 0.15, #Test\Harness\Straps.pm
@@ -2975,37 +3047,40 @@ sub first_release {
         'Text::Soundex' => 1.01, #Text\Soundex.pm
         'Text::Tabs' => 98.112801, #Text\Tabs.pm
         'Text::Wrap' => 2001.09291, #Text\Wrap.pm
-        'Thread' => 2.00,       #Thread.pm
-        'Thread::Queue' => 2.00, #Thread\Queue.pm
+        'Thread' => '2.00',       #Thread.pm
+        'Thread::Queue' => '2.00', #Thread\Queue.pm
         'Thread::Semaphore' => 2.01, #Thread\Semaphore.pm
-        'Thread::Signal' => 1.00, #Thread\Signal.pm
-        'Thread::Specific' => 1.00, #Thread\Specific.pm
-        'threads' => 1.00,      #threads.pm
+        'Thread::Signal' => '1.00', #Thread\Signal.pm
+        'Thread::Specific' => '1.00', #Thread\Specific.pm
+        'threads' => '1.00',      #threads.pm
         'threads::shared' => 0.91, #threads\shared.pm
         'Tie::Array' => 1.03,   #Tie\Array.pm
         'Tie::File' => 0.97,    #Tie\File.pm
         'Tie::Handle' => 4.1,   #Tie\Handle.pm
-        'Tie::Hash' => 1.00,    #Tie\Hash.pm
-        'Tie::Memoize' => 1.0,  #Tie\Memoize.pm
+        'Tie::Hash' => '1.00',    #Tie\Hash.pm
+        'Tie::Memoize' => '1.0',  #Tie\Memoize.pm
         'Tie::RefHash' => 1.31, #Tie\RefHash.pm
-        'Tie::Scalar' => 1.00,  #Tie\Scalar.pm
-        'Tie::SubstrHash' => 1.00, #Tie\SubstrHash.pm
+        'Tie::Scalar' => '1.00',  #Tie\Scalar.pm
+        'Tie::SubstrHash' => '1.00', #Tie\SubstrHash.pm
         'Time::gmtime' => 1.02, #Time\gmtime.pm
         'Time::HiRes' => 1.52,  #Time\HiRes.pm
         'Time::Local' => 1.07,  #Time\Local.pm
         'Time::localtime' => 1.02, #Time\localtime.pm
-        'Time::tm' => 1.00,     #Time\tm.pm
-        'Unicode::Collate' => 0.30, #Unicode\Collate.pm
+        'Time::tm' => '1.00',     #Time\tm.pm
+        'Unicode::Collate' => '0.30', #Unicode\Collate.pm
         'Unicode::Normalize' => 0.25, #Unicode\Normalize.pm
         'Unicode::UCD' => 0.21, #Unicode\UCD.pm
         'UNIVERSAL' => 1.01,    #UNIVERSAL.pm
-        'User::grent' => 1.00,  #User\grent.pm
-        'User::pwent' => 1.00,  #User\pwent.pm
+        'User::grent' => '1.00',  #User\grent.pm
+        'User::pwent' => '1.00',  #User\pwent.pm
         'utf8' => 1.02,         #utf8.pm
         'vars' => 1.01,         #vars.pm
+        'VMS::DCLsym' => '1.02', #vms\ext\DCLsym\DCLsym.pm
+        'VMS::Filespec' => '1.11', #vms\ext\Filespec.pm
+        'VMS::Stdio' => '2.3',  #vms\ext\Stdio\Stdio.pm
         'vmsish' => 1.01,       #vmsish.pm
         'warnings' => 1.03,     #warnings.pm
-        'warnings::register' => 1.00, #warnings\register.pm
+        'warnings::register' => '1.00', #warnings\register.pm
         'XS::APItest' => 0.02,  #XS\APItest.pm
         'XS::Typemap' => 0.01,  #XS\Typemap.pm
         'XSLoader' => 0.02,     #XSLoader.pm
@@ -3014,9 +3089,6 @@ sub first_release {
         5.008003 => {
         'AnyDBM_File'           => '1.00',  #lib/AnyDBM_File.pm
         'Attribute::Handlers'   => '0.78',  #lib/Attribute/Handlers.pm
-        'Attribute::Handlers::demo::Demo'=> '1.00',  #lib/Attribute/Handlers/demo/Demo.pm
-        'Attribute::Handlers::demo::Descriptions'=> '1.00',  #lib/Attribute/Handlers/demo/Descriptions.pm
-        'Attribute::Handlers::demo::MyClass'=> '1.00',  #lib/Attribute/Handlers/demo/MyClass.pm
         'attributes'            => '0.06',  #lib/attributes.pm
         'attrs'                 => '1.01',  #lib/attrs.pm
         'AutoLoader'            => '5.60',  #lib/AutoLoader.pm
@@ -3139,6 +3211,7 @@ sub first_release {
         'ExtUtils::MY'          => '0.01',  #lib/ExtUtils/MY.pm
         'ExtUtils::Packlist'    => '0.04',  #lib/ExtUtils/Packlist.pm
         'ExtUtils::testlib'     => '1.15',  #lib/ExtUtils/testlib.pm
+        'ExtUtils::XSSymSet'    => '1.0',  #vms/ext/XSSymSet.pm
         'Fatal'                 => '1.03',  #lib/Fatal.pm
         'Fcntl'                 => '1.05',  #lib/Fcntl.pm
         'fields'                => '2.03',  #lib/fields.pm
@@ -3193,6 +3266,10 @@ sub first_release {
         'IPC::Open3'            => '1.0105',  #lib/IPC/Open3.pm
         'IPC::Semaphore'        => '1.02',  #lib/IPC/Semaphore.pm
         'IPC::SysV'             => '1.04',  #lib/IPC/SysV.pm
+        'JNI'                   => '0.2',  #jpl/JNI/JNI.pm
+        'JPL::AutoLoader'       => undef,  #jpl/JPL/AutoLoader.pm
+        'JPL::Class'            => undef,  #jpl/JPL/Class.pm
+        'JPL::Compile'          => undef,  #jpl/JPL/Compile.pm
         'less'                  => '0.01',  #lib/less.pm
         'lib'                   => '0.5565',  #lib/lib.pm
         'List::Util'            => '1.13',  #lib/List/Util.pm
@@ -3246,9 +3323,15 @@ sub first_release {
         'Net::Time'             => '2.09',  #lib/Net/Time.pm
         'NEXT'                  => '0.60',  #lib/NEXT.pm
         'O'                     => '1.00',  #lib/O.pm
+        'ODBM_File'             => '1.04',  #ext/ODBM_File/ODBM_File.pm
         'Opcode'                => '1.05',  #lib/Opcode.pm
         'open'                  => '1.02',  #lib/open.pm
         'ops'                   => '1.00',  #lib/ops.pm
+        'OS2::DLL'              => '1.02',  #os2/OS2/REXX/DLL/DLL.pm
+        'OS2::ExtAttr'          => '0.02',  #os2/OS2/ExtAttr/ExtAttr.pm
+        'OS2::PrfDB'            => '0.03',  #os2/OS2/PrfDB/PrfDB.pm
+        'OS2::Process'          => '1.01',  #os2/OS2/Process/Process.pm
+        'OS2::REXX'             => '1.02',  #os2/OS2/REXX/REXX.pm
         'overload'              => '1.01',  #lib/overload.pm
         'PerlIO'                => '1.03',  #lib/PerlIO.pm
         'PerlIO::encoding'      => '0.07',  #lib/PerlIO/encoding.pm
@@ -3325,6 +3408,8 @@ sub first_release {
         'Thread::Queue'         => '2.00',  #lib/Thread/Queue.pm
         'threads'               => '1.01',  #lib/threads.pm
         'Thread::Semaphore'     => '2.01',  #lib/Thread/Semaphore.pm
+        'Thread::Signal'        => '1.00', #./ext/Thread/Thread/Signal.pm
+        'Thread::Specific'      => '1.00', #./ext/Thread/Thread/Specific.pm
         'threads::shared'       => '0.92',  #lib/threads/shared.pm
         'Tie::Array'            => '1.03',  #lib/Tie/Array.pm
         'Tie::File'             => '0.97',  #lib/Tie/File.pm
@@ -3347,6 +3432,9 @@ sub first_release {
         'User::pwent'           => '1.00',  #lib/User/pwent.pm
         'utf8'                  => '1.02',  #lib/utf8.pm
         'vars'                  => '1.01',  #lib/vars.pm
+        'VMS::DCLsym'           => '1.02',  #vms/ext/DCLsym/DCLsym.pm
+        'VMS::Filespec'         => '1.11',  #vms/ext/Filespec.pm
+        'VMS::Stdio'            => '2.3',  #vms/ext/Stdio/Stdio.pm
         'vmsish'                => '1.01',  #lib/vmsish.pm
         'warnings'              => '1.03',  #lib/warnings.pm
         'warnings::register'    => '1.00',  #lib/warnings/register.pm
@@ -3360,9 +3448,6 @@ sub first_release {
         'assertions'            => '0.01',  #lib/assertions.pm
         'assertions::activate'  => '0.01',  #lib/assertions/activate.pm
         'Attribute::Handlers'   => '0.78',  #lib/Attribute/Handlers.pm
-        'Attribute::Handlers::demo::Demo'=> '1.00',  #lib/Attribute/Handlers/demo/Demo.pm
-        'Attribute::Handlers::demo::Descriptions'=> '1.00',  #lib/Attribute/Handlers/demo/Descriptions.pm
-        'Attribute::Handlers::demo::MyClass'=> '1.00',  #lib/Attribute/Handlers/demo/MyClass.pm
         'attributes'            => '0.06',  #lib/attributes.pm
         'attrs'                 => '1.01',  #lib/attrs.pm
         'AutoLoader'            => '5.60',  #lib/AutoLoader.pm
@@ -3484,6 +3569,7 @@ sub first_release {
         'ExtUtils::MY'          => '0.01',  #lib/ExtUtils/MY.pm
         'ExtUtils::Packlist'    => '0.04',  #lib/ExtUtils/Packlist.pm
         'ExtUtils::testlib'     => '1.15',  #lib/ExtUtils/testlib.pm
+        'ExtUtils::XSSymSet'    => '1.0',  #vms/ext/XSSymSet.pm
         'Fatal'                 => '1.04',  #lib/Fatal.pm
         'Fcntl'                 => '1.05',  #lib/Fcntl.pm
         'fields'                => '2.03',  #lib/fields.pm
@@ -3512,7 +3598,7 @@ sub first_release {
         'Filter::Simple'        => '0.78',  #lib/Filter/Simple.pm
         'Filter::Util::Call'    => '1.0601',  #lib/Filter/Util/Call.pm
         'FindBin'               => '1.43',  #lib/FindBin.pm
-        'FindExt'               => '1.00',  #win32/FindExt.pm
+        'GDBM_File'             => '1.07',  #ext/GDBM_File/GDBM_File.pm
         'Getopt::Long'          => '2.34',  #lib/Getopt/Long.pm
         'Getopt::Std'           => '1.04',  #lib/Getopt/Std.pm
         'Hash::Util'            => '0.05',  #lib/Hash/Util.pm
@@ -3538,6 +3624,10 @@ sub first_release {
         'IPC::Open3'            => '1.0105',  #lib/IPC/Open3.pm
         'IPC::Semaphore'        => '1.02',  #lib/IPC/Semaphore.pm
         'IPC::SysV'             => '1.04',  #lib/IPC/SysV.pm
+        'JNI'                   => '0.2',  #jpl/JNI/JNI.pm
+        'JPL::AutoLoader'       => undef,  #jpl/JPL/AutoLoader.pm
+        'JPL::Class'            => undef,  #jpl/JPL/Class.pm
+        'JPL::Compile'          => undef,  #jpl/JPL/Compile.pm
         'less'                  => '0.01',  #lib/less.pm
         'lib'                   => '0.5565',  #lib/lib.pm
         'List::Util'            => '1.13',  #lib/List/Util.pm
@@ -3569,6 +3659,7 @@ sub first_release {
         'Memoize::Storable'     => '0.65',  #lib/Memoize/Storable.pm
         'MIME::Base64'          => '2.21',  #lib/MIME/Base64.pm
         'MIME::QuotedPrint'     => '2.21',  #lib/MIME/QuotedPrint.pm
+        'NDBM_File'             => '1.05',  #ext/NDBM_File/NDBM_File.pm
         'Net::Cmd'              => '2.24',  #lib/Net/Cmd.pm
         'Net::Config'           => '1.10',  #lib/Net/Config.pm
         'Net::Domain'           => '2.19',  #lib/Net/Domain.pm
@@ -3590,9 +3681,15 @@ sub first_release {
         'Net::Time'             => '2.09',  #lib/Net/Time.pm
         'NEXT'                  => '0.60',  #lib/NEXT.pm
         'O'                     => '1.00',  #lib/O.pm
+        'ODBM_File'             => '1.04',  #ext/ODBM_File/ODBM_File.pm
         'Opcode'                => '1.06',  #lib/Opcode.pm
         'open'                  => '1.02',  #lib/open.pm
         'ops'                   => '1.00',  #lib/ops.pm
+        'OS2::DLL'              => '1.02',  #os2/OS2/REXX/DLL/DLL.pm
+        'OS2::ExtAttr'          => '0.02',  #os2/OS2/ExtAttr/ExtAttr.pm
+        'OS2::PrfDB'            => '0.03',  #os2/OS2/PrfDB/PrfDB.pm
+        'OS2::Process'          => '1.01',  #os2/OS2/Process/Process.pm
+        'OS2::REXX'             => '1.02',  #os2/OS2/REXX/REXX.pm
         'overload'              => '1.02',  #lib/overload.pm
         'PerlIO'                => '1.02',  #lib/PerlIO.pm
         'PerlIO::encoding'      => '0.07',  #lib/PerlIO/encoding.pm
@@ -3668,6 +3765,8 @@ sub first_release {
         'Thread'                => '2.00',  #lib/Thread.pm
         'Thread::Queue'         => '2.00',  #lib/Thread/Queue.pm
         'Thread::Semaphore'     => '2.01',  #lib/Thread/Semaphore.pm
+        'Thread::Signal'        => '1.00', #./ext/Thread/Thread/Signal.pm
+        'Thread::Specific'      => '1.00', #./ext/Thread/Thread/Specific.pm
         'threads'               => '1.00',  #lib/threads.pm
         'threads::shared'       => '0.91',  #lib/threads/shared.pm
         'Tie::Array'            => '1.03',  #lib/Tie/Array.pm
@@ -3692,6 +3791,9 @@ sub first_release {
         'utf8'                  => '1.02',  #lib/utf8.pm
         'vars'                  => '1.01',  #lib/vars.pm
         'version'               => '0.29',  #lib/version.pm
+        'VMS::DCLsym'           => '1.02',  #vms/ext/DCLsym/DCLsym.pm
+        'VMS::Filespec'         => '1.11',  #vms/ext/Filespec.pm
+        'VMS::Stdio'            => '2.3',  #vms/ext/Stdio/Stdio.pm
         'vmsish'                => '1.01',  #lib/vmsish.pm
         'warnings'              => '1.03',  #lib/warnings.pm
         'warnings::register'    => '1.00',  #lib/warnings/register.pm
@@ -3833,6 +3935,7 @@ sub first_release {
         'ExtUtils::MY'          => '0.01',  #lib/ExtUtils/MY.pm
         'ExtUtils::Packlist'    => '0.04',  #lib/ExtUtils/Packlist.pm
         'ExtUtils::testlib'     => '1.15',  #lib/ExtUtils/testlib.pm
+        'ExtUtils::XSSymSet'    => '1.0',  #vms/ext/XSSymSet.pm
         'Fatal'                 => '1.04',  #lib/Fatal.pm
         'Fcntl'                 => '1.05',  #lib/Fcntl.pm
         'fields'                => '2.03',  #lib/fields.pm
@@ -3887,6 +3990,10 @@ sub first_release {
         'IPC::Open3'            => '1.0105',  #lib/IPC/Open3.pm
         'IPC::Semaphore'        => '1.02',  #lib/IPC/Semaphore.pm
         'IPC::SysV'             => '1.04',  #lib/IPC/SysV.pm
+        'JNI'                   => '0.2',  #jpl/JNI/JNI.pm
+        'JPL::AutoLoader'       => undef,  #jpl/JPL/AutoLoader.pm
+        'JPL::Class'            => undef,  #jpl/JPL/Class.pm
+        'JPL::Compile'          => undef,  #jpl/JPL/Compile.pm
         'less'                  => '0.01',  #lib/less.pm
         'lib'                   => '0.5565',  #lib/lib.pm
         'List::Util'            => '1.13',  #lib/List/Util.pm
@@ -3940,9 +4047,15 @@ sub first_release {
         'Net::Time'             => '2.09',  #lib/Net/Time.pm
         'NEXT'                  => '0.60',  #lib/NEXT.pm
         'O'                     => '1.00',  #lib/O.pm
+        'ODBM_File'             => '1.04',  #ext/ODBM_File/ODBM_File.pm
         'Opcode'                => '1.06',  #lib/Opcode.pm
         'open'                  => '1.02',  #lib/open.pm
         'ops'                   => '1.00',  #lib/ops.pm
+        'OS2::DLL'              => '1.02',  #os2/OS2/REXX/DLL/DLL.pm
+        'OS2::ExtAttr'          => '0.02',  #os2/OS2/ExtAttr/ExtAttr.pm
+        'OS2::PrfDB'            => '0.03',  #os2/OS2/PrfDB/PrfDB.pm
+        'OS2::Process'          => '1.01',  #os2/OS2/Process/Process.pm
+        'OS2::REXX'             => '1.02',  #os2/OS2/REXX/REXX.pm
         'overload'              => '1.02',  #lib/overload.pm
         'PerlIO'                => '1.03',  #lib/PerlIO.pm
         'PerlIO::encoding'      => '0.07',  #lib/PerlIO/encoding.pm
@@ -4019,6 +4132,8 @@ sub first_release {
         'Thread::Queue'         => '2.00',  #lib/Thread/Queue.pm
         'threads'               => '1.02',  #lib/threads.pm
         'Thread::Semaphore'     => '2.01',  #lib/Thread/Semaphore.pm
+        'Thread::Signal'        => '1.00', #./ext/Thread/Thread/Signal.pm
+        'Thread::Specific'      => '1.00', #./ext/Thread/Thread/Specific.pm
         'threads::shared'       => '0.92',  #lib/threads/shared.pm
         'Tie::Array'            => '1.03',  #lib/Tie/Array.pm
         'Tie::File'             => '0.97',  #lib/Tie/File.pm
@@ -4042,6 +4157,9 @@ sub first_release {
         'utf8'                  => '1.02',  #lib/utf8.pm
         'vars'                  => '1.01',  #lib/vars.pm
         'version'               => '0.36',  #lib/version.pm
+        'VMS::DCLsym'           => '1.02',  #vms/ext/DCLsym/DCLsym.pm
+        'VMS::Filespec'         => '1.11',  #vms/ext/Filespec.pm
+        'VMS::Stdio'            => '2.3',  #vms/ext/Stdio/Stdio.pm
         'vmsish'                => '1.01',  #lib/vmsish.pm
         'warnings'              => '1.03',  #lib/warnings.pm
         'warnings::register'    => '1.00',  #lib/warnings/register.pm
@@ -4134,9 +4252,6 @@ sub first_release {
         'threads'               => '1.03',  #lib/threads.pm
         'Errno'                 => '1.09_00',  #lib/Errno.pm
         'Attribute::Handlers'   => '0.78_01',  #lib/Attribute/Handlers.pm
-        'Attribute::Handlers::demo::Demo'=> '1.00',  #lib/Attribute/Handlers/demo/Demo.pm
-        'Attribute::Handlers::demo::Descriptions'=> '1.00',  #lib/Attribute/Handlers/demo/Descriptions.pm
-        'Attribute::Handlers::demo::MyClass'=> '1.00',  #lib/Attribute/Handlers/demo/MyClass.pm
         'Carp::Heavy'           => '1.01',  #lib/Carp/Heavy.pm
         'CGI::Apache'           => '1.00',  #lib/CGI/Apache.pm
         'CGI::Carp'             => '1.27',  #lib/CGI/Carp.pm
@@ -4397,6 +4512,22 @@ sub first_release {
         'XS::APItest'           => '0.03',  #lib/XS/APItest.pm
         'XS::Typemap'           => '0.01',  #lib/XS/Typemap.pm
         'threads::shared'       => '0.92',  #lib/threads/shared.pm
+        'ExtUtils::XSSymSet'    => '1.0',  #vms/ext/XSSymSet.pm
+        'JNI'                   => '0.2',  #jpl/JNI/JNI.pm
+        'JPL::AutoLoader'       => undef,  #jpl/JPL/AutoLoader.pm
+        'JPL::Class'            => undef,  #jpl/JPL/Class.pm
+        'JPL::Compile'          => undef,  #jpl/JPL/Compile.pm
+        'ODBM_File'             => '1.05',  #ext/ODBM_File/ODBM_File.pm
+        'OS2::DLL'              => '1.02',  #os2/OS2/REXX/DLL/DLL.pm
+        'OS2::ExtAttr'          => '0.02',  #os2/OS2/ExtAttr/ExtAttr.pm
+        'OS2::PrfDB'            => '0.03',  #os2/OS2/PrfDB/PrfDB.pm
+        'OS2::Process'          => '1.01',  #os2/OS2/Process/Process.pm
+        'OS2::REXX'             => '1.02',  #os2/OS2/REXX/REXX.pm
+        'Thread::Signal'        => '1.00', #./ext/Thread/Thread/Signal.pm
+        'Thread::Specific'      => '1.00', #./ext/Thread/Thread/Specific.pm
+        'VMS::DCLsym'           => '1.02',  #vms/ext/DCLsym/DCLsym.pm
+        'VMS::Filespec'         => '1.11',  #vms/ext/Filespec.pm
+        'VMS::Stdio'            => '2.3',  #vms/ext/Stdio/Stdio.pm
     },
     5.008005 => {
 
@@ -4484,9 +4615,6 @@ sub first_release {
         'threads'               => '1.05',  #lib/threads.pm
         'Errno'                 => '1.09_00',  #lib/Errno.pm
         'Attribute::Handlers'   => '0.78_01',  #lib/Attribute/Handlers.pm
-        'Attribute::Handlers::demo::Demo'=> '1.00',  #lib/Attribute/Handlers/demo/Demo.pm
-        'Attribute::Handlers::demo::Descriptions'=> '1.00',  #lib/Attribute/Handlers/demo/Descriptions.pm
-        'Attribute::Handlers::demo::MyClass'=> '1.00',  #lib/Attribute/Handlers/demo/MyClass.pm
         'Carp::Heavy'           => '1.01',  #lib/Carp/Heavy.pm
         'CGI::Apache'           => '1.00',  #lib/CGI/Apache.pm
         'CGI::Carp'             => '1.28',  #lib/CGI/Carp.pm
@@ -4748,6 +4876,22 @@ sub first_release {
         'XS::APItest'           => '0.04',  #lib/XS/APItest.pm
         'XS::Typemap'           => '0.01',  #lib/XS/Typemap.pm
         'threads::shared'       => '0.92',  #lib/threads/shared.pm
+        'ExtUtils::XSSymSet'    => '1.0',  #vms/ext/XSSymSet.pm
+        'JNI'                   => '0.2',  #jpl/JNI/JNI.pm
+        'JPL::AutoLoader'       => undef,  #jpl/JPL/AutoLoader.pm
+        'JPL::Class'            => undef,  #jpl/JPL/Class.pm
+        'JPL::Compile'          => undef,  #jpl/JPL/Compile.pm
+        'ODBM_File'             => '1.05',  #ext/ODBM_File/ODBM_File.pm
+        'OS2::DLL'              => '1.02',  #os2/OS2/REXX/DLL/DLL.pm
+        'OS2::ExtAttr'          => '0.02',  #os2/OS2/ExtAttr/ExtAttr.pm
+        'OS2::PrfDB'            => '0.03',  #os2/OS2/PrfDB/PrfDB.pm
+        'OS2::Process'          => '1.01',  #os2/OS2/Process/Process.pm
+        'OS2::REXX'             => '1.02',  #os2/OS2/REXX/REXX.pm
+        'Thread::Signal'        => '1.00', #./ext/Thread/Thread/Signal.pm
+        'Thread::Specific'      => '1.00', #./ext/Thread/Thread/Specific.pm
+        'VMS::DCLsym'           => '1.02',  #vms/ext/DCLsym/DCLsym.pm
+        'VMS::Filespec'         => '1.11',  #vms/ext/Filespec.pm
+        'VMS::Stdio'            => '2.3',  #vms/ext/Stdio/Stdio.pm
     },
    );
 

@@ -1,4 +1,4 @@
-README for Module::CoreList 1.95
+README for Module::CoreList 1.96
 
 =head1 NAME
 
@@ -12,6 +12,9 @@ Module::CoreList - what modules shipped with versions of perl
 
  print Module::CoreList->first_release('File::Spec');       # prints 5.00503
  print Module::CoreList->first_release('File::Spec', 0.82); # prints 5.006001
+
+ print join ", ", @{ $Module::CoreList::families{5.005} };
+    # prints "5.005, 5.00503, 5.00504"
 
 
 =head1 DEPENDENCIES
@@ -36,6 +39,15 @@ What changed over the last 3 revisions
 
 =over
 
+=item 1.96	Monday 26th July, 2004
+
+	Lars Thegler supplied many many fixes as #6922, #7085, #7086,
+	#7089, #7090, #7091, #7092, #7093, #7094, #7095, #7096, #7098,
+	#7099, #7100, and #7101
+	Added the %families hash.
+	Small changes to the tests to ensure that things look consistent.
+
+
 =item 1.95	Wednesday 21st July, 2004
 
 	Data from José Pedro Oliveirafor 5.8.4 and 5.8.5
@@ -47,11 +59,6 @@ What changed over the last 3 revisions
 	#6920, #6922, and #6923)
 	Data from Jose Pedro Oliveira for 5.005_04, 5.8.3, and 5.9.1.
 
-
-=item 1.93	Friday 14th November, 2003
-
-	Data for 5.9.0 and 5.6.2
-
 =back
 
 =head1 AUTHOR
@@ -60,7 +67,7 @@ Richard Clamp E<lt>richardc@unixbeard.netE<gt>
 
 =head1 COPYRIGHT
 
-Copyright (C) 2002 Richard Clamp.  All Rights Reserved.
+Copyright (C) 2002-2004 Richard Clamp.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

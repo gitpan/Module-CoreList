@@ -1,6 +1,7 @@
 #!perl -w
 use strict;
-use Test::More tests => 10;
+use Module::CoreList;
+use Test::More tests => 12;
 
 BEGIN { require_ok('Module::CoreList'); }
 
@@ -28,3 +29,21 @@ is(Module::CoreList->first_release('File::Spec', 0.82), 5.006_001,
 is_deeply([ sort keys %Module::CoreList::released ],
           [ sort keys %Module::CoreList::version ],
           "have a note of everythings release");
+
+is_deeply( [ map {
+    exists $Module::CoreList::version{ $_ }{FindExt} ? $_ : ()
+} keys %Module::CoreList::version ],
+           [], "FindExt shouldn't get included rt#6922" );
+
+
+my $consistent = 1;
+for my $family (values %Module::CoreList::families) {
+    my $first = shift @$family;
+    my $has = join " ", sort keys %{ $Module::CoreList::versions{ $first } };
+    for my $member (@$family) {
+        $has eq join " ", sort keys %{ $Module::CoreList::versions{ $member } }
+          or do { diag "$first -> $member family"; $consistent = 0 };
+    }
+}
+is( $consistent, 1,
+    "families seem consistent (descendants have same modules as ancestors)" );
