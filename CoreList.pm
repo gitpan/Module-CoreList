@@ -1,10 +1,10 @@
 package Module::CoreList;
-#       $Id: CoreList.pm 1101 2003-04-22 15:18:47Z richardc $
+#       $Id: CoreList.pm 1161 2003-05-18 13:52:02Z richardc $
 
 use strict;
 use Carp;
 use vars qw/$VERSION %released %version/;
-$VERSION = '1.9';
+$VERSION = '1.91';
 
 =head1 NAME
 
@@ -1027,6 +1027,7 @@ sub first_release {
        'VMS::DCLsym'           => '1.01', #./vms/ext/DCLsym/DCLsym.pm
        'VMS::Filespec'         => undef, #./vms/ext/Filespec.pm
        'VMS::Stdio'            => '2.2', #./vms/ext/Stdio/Stdio.pm
+       'XSLoader'              => '0.01',
        'attributes'            => '0.03', #./lib/attributes.pm
        'attrs'                 => '1.0', #./ext/attrs/attrs.pm
        'autouse'               => '1.02', #./lib/autouse.pm
@@ -1277,6 +1278,7 @@ sub first_release {
        'vmsish'                => undef,
        'warnings'              => undef,
        'warnings::register'    => undef,
+       'XSLoader'              => '0.01',
       },
    5.007003
    => {
@@ -1596,6 +1598,7 @@ sub first_release {
        'warnings'              => '1.00',
        'warnings::register'    => '1.00',
        'XS::Typemap'           => '0.01',
+       'XSLoader'              => '0.01',
       },
 
    5.008
@@ -1933,6 +1936,7 @@ sub first_release {
        'warnings::register'    => '1.00',  #./lib/warnings/register.pm
        'XS::APItest'           => '0.01',  #./ext/XS/APItest/APItest.pm
        'XS::Typemap'           => '0.01',  #./ext/XS/Typemap/Typemap.pm
+       'XSLoader'              => '0.01',
       },
   );
 
