@@ -1,13 +1,24 @@
 use ExtUtils::MakeMaker;
 
 my $module = 'CoreList.pm';
-WriteMakefile('NAME'      => 'Module::CoreList',
-              'VERSION_FROM' => $module, # finds $VERSION
-              'PREREQ_PM' => { 'Test::More' => 0 });
+%depends = ( 'Test::More' => 0 );
+WriteMakefile('NAME'         => 'Module::CoreList',
+              'VERSION_FROM' => $module,
+              'PREREQ_PM'    => \%depends)
+  if $0 =~ /makefile.pl/i;
 
 sub MY::postamble {
     return <<EOF
-README: $module
-\tpod2text $module > README
+README: $module Changes Makefile.PL ../makereadme
+\t../makereadme $module \$(NAME) \$(VERSION) > README
+
+dist: README
+
+cover:
+\trm -rf cover_db
+\tPERL5OPT=-MDevel::Cover \$(MAKE) test || true
+\tcover cover_db
 EOF
 }
+
+1;

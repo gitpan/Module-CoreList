@@ -1,10 +1,10 @@
 package Module::CoreList;
-#       $Id: CoreList.pm,v 1.24 2002/07/30 04:43:03 richardc Exp $
+#       $Id: CoreList.pm 1063 2003-02-13 02:24:54Z richardc $
 
 use strict;
 use Carp;
 use vars qw/$VERSION %released %version/;
-$VERSION = '1.7';
+$VERSION = '1.8';
 
 =head1 NAME
 
@@ -1689,7 +1689,7 @@ sub first_release {
        'English'               => '1.00',  #./lib/English.pm
        'Env'                   => '1.00',  #./lib/Env.pm
        'Exporter'              => '5.566',  #./lib/Exporter.pm
-       'Exporter::Heavy'       => '5.562',  #./lib/Exporter/Heavy.pm
+       'Exporter::Heavy'       => '5.566',  #./lib/Exporter/Heavy.pm
        'ExtUtils::Command'     => '1.04',  #./lib/ExtUtils/Command.pm
        'ExtUtils::Command::MM' => '0.01',  #./lib/ExtUtils/Command/MM.pm
        'ExtUtils::Constant'    => '0.12',  #./lib/ExtUtils/Constant.pm

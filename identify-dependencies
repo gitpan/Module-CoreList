@@ -15,7 +15,7 @@ print "$0: checking ", join(', ', @files), "\n";
 
 my @used;
 for (@files) {
-    open my $fh, "$^X -MModule::CoreList=dumpinc $_|"
+    open my $fh, "$^X -Mblib -MModule::CoreList=dumpinc $_|"
       or die "couldn't fork $!";
     while (<$fh>) { last if /^---INC---/ }
     push @used, map { chomp; s{/}{::}g; s{\.pm$}{}; $_ } <$fh>;

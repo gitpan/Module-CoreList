@@ -1,70 +1,61 @@
-NAME
-    Module::CoreList - what modules shipped with versions of perl
+README for Module::CoreList 1.8
 
-SYNOPSIS
-     use Module::CoreList;
+=head1 NAME
 
-     print $Module::CoreList::version{5.00503}{CPAN}; # prints 1.48
+Module::CoreList - what modules shipped with versions of perl
 
-     print Module::CoreList->first_release('File::Spec');       # prints 5.00503
-     print Module::CoreList->first_release('File::Spec', 0.82); # prints 5.006001
+=head1 SYNOPSIS
 
-DESCRIPTION
-    Module::CoreList contains the hash of hashes %Module::CoreList::version,
-    this is keyed on perl version as indicated in $]. The second level hash
-    is module => version pairs.
+ use Module::CoreList;
 
-    Note, it is possible for the version of a module to be unspecified,
-    whereby the value is undef, so use "exists $version{$foo}{$bar}" if
-    that's what you're testing for.
+ print $Module::CoreList::version{5.00503}{CPAN}; # prints 1.48
 
-    It also contains %Module::CoreList::released hash, which has ISO
-    formatted versions of the release dates, as gleaned from perlhist
+ print Module::CoreList->first_release('File::Spec');       # prints 5.00503
+ print Module::CoreList->first_release('File::Spec', 0.82); # prints 5.006001
 
-CAVEATS
-    Module::CoreList currently only covers the 5.003_07, 5.004, 5.004)05,
-    5.005, 5.005_03, 5.6.0, 5.6.1, 5.7.3 and 5.8.0 releases of perl. Probing
-    this information can be rather time consuming so patches are welcomed
-    for earlier versions.
 
-HISTORY
-    1.6 19th July 2002
-        Included Config as a shipped module for all releases of perl (caught
-        by Mark Fowler)
+=head1 DEPENDENCIES
 
-        Added data for the 5.8 release.
+This module has external dependencies on the following modules:
 
-    1.5 2nd April 2002
-        Fixed a glaring bug caught by the testsuite but sadly released.
-        perl5.004_05 was released post 5.005_03 and so isn't the first
-        release to contain File::Spec.
+ Test::More
 
-        Added data for 5.003_07, 5.004, and 5.005 releases.
+=head1 INSTALLATION
 
-        Added the %released hash.
+ perl Makefile.PL
+ make test
 
-    1.4 2nd April 2002
-        Bugfixes from Roland Bauer to allow the code to work under 5.004_04.
+and if all goes well
 
-        Using a cgi developed by Roland caught and fixed a number of bugs in
-        the previous extraction of module names.
+ make install
 
-        Rewrote the name extractor to be simpler.
+=head1 HISTORY
 
-        Added data for the 5.004_05 and 5.6.0 releases of perl.
+1.8	13th February 2003
+	- reformatted Changes file to use makereadme
+	- fixed version of Exporter::Heavy for 5.8 (as caught by Leon Brocard)
 
-    1.3 25th March 2002.
-        Initial CPAN release, covers 5.00503, 5.6.1 and 5.7.3
+1.7	30th July 2002
+	- HISTORY contents moved to this Changes file
+	- identify-dependencies script given some loving.
 
-AUTHOR
-    Richard Clamp <richardc@unixbeard.net>
+1.6	July 2002
+	- Included Config as a shipped module for all releases of perl
+	  (caught by Mark Fowler)
+	- Added data for the 5.8 release.
 
-COPYRIGHT
-    Copyright (C) 2002 Richard Clamp. All Rights Reserved.
+=head1 AUTHOR
 
-    This module is free software; you can redistribute it and/or modify it
-    under the same terms as Perl itself.
+Richard Clamp E<lt>richardc@unixbeard.netE<gt>
 
-SEE ALSO
-    Module::Info, perl
+=head1 COPYRIGHT
+
+Copyright (C) 2002 Richard Clamp.  All Rights Reserved.
+
+This module is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=head1 SEE ALSO
+
+L<Module::Info>, L<perl>
 
