@@ -1,4 +1,4 @@
-README for Module::CoreList 1.8
+README for Module::CoreList 1.9
 
 =head1 NAME
 
@@ -31,6 +31,9 @@ and if all goes well
 
 =head1 HISTORY
 
+1.9     22nd February 2003
+        - incorported Podmaster's corelist script
+
 1.8	13th February 2003
 	- reformatted Changes file to use makereadme
 	- fixed version of Exporter::Heavy for 5.8 (as caught by Leon Brocard)
@@ -38,11 +41,6 @@ and if all goes well
 1.7	30th July 2002
 	- HISTORY contents moved to this Changes file
 	- identify-dependencies script given some loving.
-
-1.6	July 2002
-	- Included Config as a shipped module for all releases of perl
-	  (caught by Mark Fowler)
-	- Added data for the 5.8 release.
 
 =head1 AUTHOR
 

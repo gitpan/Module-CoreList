@@ -1,3 +1,6 @@
+1.9     22nd April 2003
+        - incorported PodMaster's corelist script
+
 1.8	13th February 2003
 	- reformatted Changes file to use makereadme
 	- fixed version of Exporter::Heavy for 5.8 (as caught by Leon Brocard)

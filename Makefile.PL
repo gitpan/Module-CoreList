@@ -3,6 +3,7 @@ use ExtUtils::MakeMaker;
 my $module = 'CoreList.pm';
 %depends = ( 'Test::More' => 0 );
 WriteMakefile('NAME'         => 'Module::CoreList',
+              'EXE_FILES'    => ['corelist'],
               'VERSION_FROM' => $module,
               'PREREQ_PM'    => \%depends)
   if $0 =~ /makefile.pl/i;

@@ -1,10 +1,10 @@
 package Module::CoreList;
-#       $Id: CoreList.pm 1063 2003-02-13 02:24:54Z richardc $
+#       $Id: CoreList.pm 1101 2003-04-22 15:18:47Z richardc $
 
 use strict;
 use Carp;
 use vars qw/$VERSION %released %version/;
-$VERSION = '1.8';
+$VERSION = '1.9';
 
 =head1 NAME
 
