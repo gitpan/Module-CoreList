@@ -1,4 +1,4 @@
-README for Module::CoreList 1.97
+README for Module::CoreList 1.98
 
 =head1 NAME
 
@@ -38,6 +38,11 @@ What changed over the last 3 revisions
 
 =over
 
+=item 1.98	Saturday 1st January, 2005
+
+	Data from José Pedro Oliveira for 5.8.6
+
+
 =item 1.97	Wednesday 8th September, 2004
 
 	Ship with a traditional Makefile.PL
@@ -50,11 +55,6 @@ What changed over the last 3 revisions
 	#7099, #7100, and #7101
 	Added the %families hash.
 	Small changes to the tests to ensure that things look consistent.
-
-
-=item 1.95	Wednesday 21st July, 2004
-
-	Data from José Pedro Oliveirafor 5.8.4 and 5.8.5
 
 =back
 
