@@ -1,4 +1,4 @@
-README for Module::CoreList 1.99
+README for Module::CoreList 2.00
 
 =head1 NAME
 
@@ -39,6 +39,10 @@ What changed over the last 3 revisions
 
 =over
 
+=itme 2.00	Sunday 10th April, 2005
+
+	Data from Sebastien Aperghis-Tramoni for perl 5.00{0,1,2}.
+
 =item 1.99	Tuesday 5th April, 2005
 
 	Backport to CPAN the version of Module::CoreList shipped with
@@ -47,10 +51,6 @@ What changed over the last 3 revisions
 =item 1.98	Saturday 1st January, 2005
 
 	Data from José Pedro Oliveira for 5.8.6
-
-=item 1.97	Wednesday 8th September, 2004
-
-	Ship with a traditional Makefile.PL
 
 =back
 

@@ -1,3 +1,6 @@
+2.00	Sunday 10th April, 2005
+	Data from Sebastien Aperghis-Tramoni for perl 5.00{0,1,2}.
+
 1.99	Tuesday 5th April, 2005
 	Backport to CPAN the version of Module::CoreList shipped with
 	perl 5.9.2 (containing info for this latest distribution).
