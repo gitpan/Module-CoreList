@@ -1,3 +1,9 @@
+2.01	Sunday 24th April, 2005
+	Allow to specify several modules on the corelist command-line
+	(Yves Orton)
+	Add a %patchlevel hash to get perforce patchlevels corresponding to
+	released versions
+
 2.00	Sunday 10th April, 2005
 	Data from Sebastien Aperghis-Tramoni for perl 5.00{0,1,2}.
 
