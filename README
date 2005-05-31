@@ -1,4 +1,4 @@
-README for Module::CoreList 2.00
+README for Module::CoreList 2.02
 
 =head1 NAME
 
@@ -39,6 +39,10 @@ What changed over the last 3 revisions
 
 =over
 
+=item 2.02	Tuesday 31th May, 2005
+
+	Include data for perl 5.8.7
+
 =item 2.01	Sunday 24th April, 2005
 
 	Allow to specify several modules on the corelist command-line
@@ -49,11 +53,6 @@ What changed over the last 3 revisions
 =item 2.00	Sunday 10th April, 2005
 
 	Data from Sebastien Aperghis-Tramoni for perl 5.00{0,1,2}.
-
-=item 1.99	Tuesday 5th April, 2005
-
-	Backport to CPAN the version of Module::CoreList shipped with
-	perl 5.9.2 (containing info for this latest distribution)
 
 =back
 
