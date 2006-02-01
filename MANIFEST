@@ -7,3 +7,4 @@ MANIFEST
 Makefile.PL
 META.yml
 t/corelist.t
+t/pod.t
