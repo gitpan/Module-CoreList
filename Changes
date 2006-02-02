@@ -1,3 +1,7 @@
+2.04	Thursday 2nd February, 2006
+	Fix patchlevel for 5.8.8 (Gisle Aas)
+	Silence warnings in corelist utility
+
 2.03	Wednesday 1st February, 2006
 	Include data for perl 5.9.3 and 5.8.8
 
