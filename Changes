@@ -1,3 +1,9 @@
+2.06	Tue Aug  1 2006
+	Patches by Marius Feraru :
+	- handle dotted perl versions (e.g. 5.8.6)
+	- add an easy way to determine what was some module's version bundled
+	  with a specified Perl release
+
 2.05	Tue Jun  6 2006
 	Patches by Adriano Ferreira :
 	- corelist utility accepts regexes as arguments, eg. /IPC::Open/

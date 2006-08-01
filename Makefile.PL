@@ -7,7 +7,8 @@ WriteMakefile
     'NAME' => 'Module::CoreList',
     'VERSION_FROM' => 'lib/Module/CoreList.pm',
     'PREREQ_PM' => {
-	'Test::More' => '0'
+	'Test::More' => '0',
+	'version' => '0',
     },
     'EXE_FILES' => [ 'corelist' ],
     'PL_FILES' => {},

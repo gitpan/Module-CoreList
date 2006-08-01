@@ -1,4 +1,4 @@
-README for Module::CoreList 2.04
+README for Module::CoreList 2.06
 
 =head1 NAME
 
@@ -35,24 +35,7 @@ and if all goes well
 
 =head1 HISTORY
 
-What changed over the last 3 revisions
-
-=over
-
-=item 2.04	Thursday 2nd February, 2006
-
-	Fix patchlevel for 5.8.8 (Gisle Aas)
-	Silence warnings in corelist utility
-
-=item 2.03	Wednesday 1st February, 2006
-
-	Include data for perl 5.9.3 and 5.8.8
-
-=item 2.02	Tuesday 31th May, 2005
-
-	Include data for perl 5.8.7
-
-=back
+See the F<Changes> file.
 
 =head1 AUTHOR
 
