@@ -1,3 +1,7 @@
+2.07	Wed Aug  9 2006
+	- Regenerate data correctly for 5.8.7, 5.8.8, 5.9.2 and 5.9.3
+	- Add OS-specific modules for those versions
+
 2.06	Tue Aug  1 2006
 	Patches by Marius Feraru :
 	- handle dotted perl versions (e.g. 5.8.6)
