@@ -1,3 +1,7 @@
+2.09	Thu Oct  5 2006
+	- Make the dependency on version.pm optional
+	- Improve doc of corelist(1)
+
 2.08	Thu Sep  7 2006
 	- Add data for 5.9.4
 
