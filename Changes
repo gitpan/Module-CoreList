@@ -1,3 +1,7 @@
+2.10	Wed May  9 2007
+	- Add versioning for the Unicode Character Database bundled
+	  with Perl (H. Merijn Brand)
+
 2.09	Thu Oct  5 2006
 	- Make the dependency on version.pm optional
 	- Improve doc of corelist(1)
