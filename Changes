@@ -1,3 +1,9 @@
+2.11	Thu May 10 2007
+	- first_release() now returns the first release in the order of
+	  perl version numbers. Add a new method first_release_by_date()
+	  to keep the old behaviour available. Suggested by Michael G Schwern.
+	- Update data about UCD versions
+
 2.10	Wed May  9 2007
 	- Add versioning for the Unicode Character Database bundled
 	  with Perl (H. Merijn Brand)
