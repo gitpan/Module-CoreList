@@ -1,3 +1,6 @@
+2.12	Mon Jul  9 2007
+	- Add data for perl 5.9.5
+
 2.11	Thu May 10 2007
 	- first_release() now returns the first release in the order of
 	  perl version numbers. Add a new method first_release_by_date()

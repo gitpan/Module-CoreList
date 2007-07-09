@@ -1,9 +1,9 @@
 --- #YAML:1.0
 name:                Module-CoreList
-version:             2.11
+version:             2.12
 abstract:            ~
 license:             ~
-generated_by:        ExtUtils::MakeMaker version 6.32_01
+generated_by:        ExtUtils::MakeMaker version 6.36
 distribution_type:   module
 requires:     
     Test::More:                    0
