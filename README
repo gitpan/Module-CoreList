@@ -1,4 +1,4 @@
-README for Module::CoreList 2.11
+README for Module::CoreList 2.13
 
 =head1 NAME
 
@@ -43,7 +43,7 @@ Richard Clamp E<lt>richardc@unixbeard.netE<gt>
 
 =head1 COPYRIGHT
 
-Copyright (C) 2002-2006 Richard Clamp.  All Rights Reserved.
+Copyright (C) 2002-2007 Richard Clamp.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
