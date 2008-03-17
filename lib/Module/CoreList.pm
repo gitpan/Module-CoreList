@@ -1,7 +1,7 @@
 package Module::CoreList;
 use strict;
 use vars qw/$VERSION %released %patchlevel %version %families/;
-$VERSION = '2.13';
+$VERSION = '2.14';
 
 =head1 NAME
 
@@ -138,6 +138,11 @@ sub find_modules {
     return sort keys %mods
 }
 
+sub find_version {
+    my ($class, $v) = @_;
+    return $version{$v} if defined $version{$v};
+    return undef;
+}
 
 # when things escaped
 %released = (
@@ -176,7 +181,7 @@ sub find_modules {
 %patchlevel = (
     5.005    => [perl => 1647],
     5.00503  => ['maint-5.005' => 3198],
-    5.00405  => ['maint-5.004' => 999],
+    5.00405  => ['maint-5.004' => 3296],
     5.006    => [perl => 5899],
     5.006001 => ['maint-5.6' => 9654],
     5.006002 => ['maint-5.6' => 21727],

@@ -1,3 +1,12 @@
+2.14	Mon Mar 17 2008
+	corelist changes:
+        - Add a new -d option to find first perl version by date
+          and not by version number
+        - Better handling of perl versions that end with a 0
+        - use version.pm only for version numbers that have multiple dots
+
+	- Fix tag for 5.00405 (Sam Vilain)
+
 2.13	Tue Dec 18 2007
 	- Add data for perl 5.10.0
 
