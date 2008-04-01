@@ -1,6 +1,6 @@
 use ExtUtils::MakeMaker;
 
-push @extra, 'INSTALLDIRS' => 'perl' if $] >= 5.009002;
+push @extra, 'INSTALLDIRS' => 'perl' if $] >= 5.008009;
 
 WriteMakefile
 (
@@ -11,6 +11,7 @@ WriteMakefile
     },
     'EXE_FILES' => [ 'corelist' ],
     'PL_FILES' => {},
+    LICENSE => 'perl',
     @extra,
 )
 ;

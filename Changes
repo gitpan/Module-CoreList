@@ -1,3 +1,7 @@
+2.15	Tue Apr  1 2008
+	- Add missing entries for Config.pm in recent perls
+	- Install in core location for perl >= 5.8.9 (Jerry D. Hedden)
+
 2.14	Mon Mar 17 2008
 	corelist changes:
         - Add a new -d option to find first perl version by date
