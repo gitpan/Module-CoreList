@@ -1,3 +1,10 @@
+2.17	Sun Jan 18 2009
+	- Make $] work to select perl version for 5.1 and 5.10 (John Peacock)
+	- Add ExtUtils::Miniperl to the list of core modules for all versions
+	  >= 5.00504
+	- Add 5.8.9
+	- Fix release date for 5.002 (Grant McLean)
+
 2.15	Tue Apr  1 2008
 	- Add missing entries for Config.pm in recent perls
 	- Install in core location for perl >= 5.8.9 (Jerry D. Hedden)
