@@ -1,3 +1,8 @@
+2.18	Mon Aug 24 2009
+	- Update for perl 5.10.1
+	- Remove %patchlevel hash (now that perl uses git and not perforce)
+	- Add %upstream and %bug_tracker data (Nicholas Clark)
+
 2.17	Sun Jan 18 2009
 	- Make $] work to select perl version for 5.1 and 5.10 (John Peacock)
 	- Add ExtUtils::Miniperl to the list of core modules for all versions
