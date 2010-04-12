@@ -1,7 +1,7 @@
 --- #YAML:1.0
 name:               Module-CoreList
-version:            2.26
-abstract:           ~
+version:            2.29
+abstract:           what modules shipped with versions of perl
 author:  []
 license:            perl
 distribution_type:  module
