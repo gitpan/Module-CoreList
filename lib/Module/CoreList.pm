@@ -3,7 +3,7 @@ use strict;
 use vars qw/$VERSION %released %version %families %upstream
 	    %bug_tracker %deprecated/;
 use Module::CoreList::TieHashDelta;
-$VERSION = '2.75';
+$VERSION = '2.76';
 
 my $dumpinc = 0;
 sub import {
@@ -202,6 +202,7 @@ sub changes_between {
     5.015009 => '2012-03-20',
     5.016000 => '2012-05-20',
     5.016001 => '2012-08-08',
+    5.016002 => '2012-11-01',
     5.017000 => '2012-05-26',
     5.017001 => '2012-06-20',
     5.017002 => '2012-07-20',
@@ -6723,6 +6724,13 @@ my %delta = (
         removed => {
         }
     },
+    5.016002 => {
+        delta_from => 5.016001,
+        changed => {
+        },
+        removed => {
+        }
+    },
     5.017 => {
         delta_from => 5.016,
         changed => {
@@ -7436,6 +7444,8 @@ for my $version (sort { $a <=> $b } keys %delta) {
     5.016000 => {
     },
     5.016001 => {
+    },
+    5.016002 => {
     },
     5.017000 => {
     },
