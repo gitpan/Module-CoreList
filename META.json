@@ -38,5 +38,14 @@
       }
    },
    "release_status" : "stable",
-   "version" : "2.88"
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://rt.perl.org/rt3/"
+      },
+      "homepage" : "http://dev.perl.org/",
+      "repository" : {
+         "url" : "git://perl5.git.perl.org/perl.git"
+      }
+   },
+   "version" : "2.90"
 }
