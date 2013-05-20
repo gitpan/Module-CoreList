@@ -24,4 +24,4 @@ resources:
   bugtracker: https://rt.perl.org/rt3/
   homepage: http://dev.perl.org/
   repository: git://perl5.git.perl.org/perl.git
-version: 2.90
+version: 2.91
