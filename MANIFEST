@@ -4,12 +4,14 @@ identify-dependencies
 lib/Module/CoreList.pm
 lib/Module/CoreList.pod
 lib/Module/CoreList/TieHashDelta.pm
-README
-MANIFEST
+lib/Module/CoreList/Utils.pm
 Makefile.PL
+MANIFEST
+META.json			Module JSON meta-data (added by MakeMaker)
 META.yml
+README
 t/corelist.t
 t/deprecated.t
 t/find_modules.t
 t/pod.t
-META.json                                Module JSON meta-data (added by MakeMaker)
+t/utils.t
