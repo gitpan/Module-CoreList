@@ -3,7 +3,7 @@ use strict;
 use vars qw/$VERSION %released %version %families %upstream
 	    %bug_tracker %deprecated %delta/;
 use Module::CoreList::TieHashDelta;
-$VERSION = '3.02';
+$VERSION = '3.03';
 
 my $dumpinc = 0;
 sub import {
@@ -242,6 +242,7 @@ sub changes_between {
     5.019005 => '2013-10-20',
     5.019006 => '2013-11-20',
     5.019007 => '2013-12-20',
+    5.018002 => '2014-01-09',
   );
 
 for my $version ( sort { $a <=> $b } keys %released ) {
@@ -8046,6 +8047,18 @@ for my $version ( sort { $a <=> $b } keys %released ) {
            'VMS::Filespec'         => 1,
         }
     },
+    5.018002 => {
+        delta_from => 5.018001,
+        changed => {
+            'B'                     => '1.42_02',
+            'B::Concise'            => '0.95_01',
+            'Config'                => '5.018002',
+            'File::Glob'            => '1.20_01',
+            'Module::CoreList'      => '3.03',
+            'Module::CoreList::TieHashDelta'=> '3.03',
+            'Module::CoreList::Utils'=> '3.03',
+        },
+    },
     5.019000 => {
         delta_from => 5.018000,
         changed => {
@@ -9465,6 +9478,14 @@ for my $version (sort { $a <=> $b } keys %delta) {
         removed => {
         }
     },
+    5.018002 => {
+        delta_from => 5.018001,
+        changed => {
+        },
+        removed => {
+        }
+    },
+
 
     5.019    => {
         delta_from => 5.018,
@@ -9592,22 +9613,6 @@ for my $version (sort { $a <=> $b } keys %delta) {
         delta_from => 5.019005,
         changed => {
             'Package::Constants'    => '1',
-        },
-        removed => {
-        }
-    },
-    5.019007 => {
-        delta_from => 5.019006,
-        changed => {
-            'CGI'                   => '1',
-            'CGI::Apache'           => '1',
-            'CGI::Carp'             => '1',
-            'CGI::Cookie'           => '1',
-            'CGI::Fast'             => '1',
-            'CGI::Pretty'           => '1',
-            'CGI::Push'             => '1',
-            'CGI::Switch'           => '1',
-            'CGI::Util'             => '1',
         },
         removed => {
         }
