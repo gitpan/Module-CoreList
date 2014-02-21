@@ -4,7 +4,7 @@ use vars qw/$VERSION %released %version %families %upstream
 	    %bug_tracker %deprecated %delta/;
 use Module::CoreList::TieHashDelta;
 use version;
-$VERSION = '3.06';
+$VERSION = '3.07';
 
 my $dumpinc = 0;
 sub import {
@@ -10786,6 +10786,7 @@ for my $version (sort { $a <=> $b } keys %deprecated) {
 $released{'5.000'} = $released{5};
 $version{'5.000'} = $version{5};
 
+_create_aliases(\%delta);
 _create_aliases(\%released);
 _create_aliases(\%version);
 _create_aliases(\%deprecated);
