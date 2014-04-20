@@ -4,7 +4,7 @@
       "unknown"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.92, CPAN::Meta::Converter version 2.140640",
+   "generated_by" : "ExtUtils::MakeMaker version 6.96, CPAN::Meta::Converter version 2.140640",
    "license" : [
       "perl_5"
    ],
@@ -48,5 +48,5 @@
          "url" : "git://perl5.git.perl.org/perl.git"
       }
    },
-   "version" : "3.09"
+   "version" : "3.10"
 }
