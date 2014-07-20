@@ -10,7 +10,6 @@ MANIFEST
 Makefile.PL
 META.yml
 t/corelist.t
-t/corevers.t
 t/deprecated.t
 t/find_modules.t
 t/is_core.t
