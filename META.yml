@@ -25,4 +25,4 @@ resources:
   bugtracker: https://rt.perl.org/rt3/
   homepage: http://dev.perl.org/
   repository: git://perl5.git.perl.org/perl.git
-version: '5.021003'
+version: '5.20140914'
